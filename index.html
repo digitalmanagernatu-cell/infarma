@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Betrés ON · Pedidos Infarma 2026</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#7B3F1A;--brand-l:#C4681F;--brand-bg:#FDF5EE;
+  --accent:#C4943A;--dark:#1C1917;--mid:#57534E;
+  --light:#A8A29E;--border:#E7E5E4;
+  --green:#16A34A;--red:#DC2626;--blue:#1D4ED8;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.05);
+  --r:10px;
+  --font-d:'Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+}
+body{font-family:var(--font);background:#F0EBE3;color:var(--dark);min-height:100vh;font-size:14px}
+
+/* HEADER */
+.hdr{background:var(--dark);color:#fff;padding:0 16px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.hdr-logo{font-family:var(--font-d);font-size:16px;letter-spacing:.3px}
+.hdr-logo span{color:var(--accent)}
+.hdr-r{display:flex;align-items:center;gap:7px}
+.sbadge{display:flex;align-items:center;gap:4px;font-size:11px;padding:3px 8px;border-radius:20px;font-weight:600;cursor:pointer}
+.s-on{background:rgba(22,163,74,.2);color:#4ADE80}
+.s-off{background:rgba(220,38,38,.2);color:#FCA5A5}
+.s-sync{background:rgba(196,148,58,.3);color:#FCD34D}
+.sdot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.pulse{animation:pulse 1.2s ease infinite}
+.spin{animation:spin .8s linear infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ppill{background:rgba(196,148,58,.2);color:#B45309;font-size:11px;padding:3px 9px;border-radius:10px;font-weight:600}
+
+/* NAV */
+.nav{background:#fff;border-bottom:1px solid var(--border);display:flex;padding:0 16px;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.ntab{padding:11px 16px;font-size:13px;font-weight:500;color:var(--light);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s}
+.ntab.active{color:var(--brand);border-bottom-color:var(--brand)}
+.ntab:hover:not(.active){color:var(--mid)}
+.nbadge{background:var(--brand);color:#fff;font-size:10px;min-width:16px;height:16px;border-radius:8px;padding:0 4px;margin-left:4px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+
+/* LAYOUT */
+.wrap{max-width:780px;margin:0 auto;padding:18px 12px}
+.view{display:none}.view.active{display:block}
+
+/* SYNC BAR */
+.syncbar{background:#fff;border-radius:var(--r);padding:10px 14px;box-shadow:var(--shadow);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.syncbar-l{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mid)}
+.syncbar-r{display:flex;gap:6px}
+.sync-indicator{width:8px;height:8px;border-radius:50%}
+.si-ok{background:var(--green)}.si-pend{background:var(--accent)}.si-err{background:var(--red)}
+
+/* CARDS */
+.card{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden}
+.card-hdr{padding:13px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-hdr-l{display:flex;align-items:center;gap:8px}
+.card-ico{width:28px;height:28px;border-radius:6px;background:var(--brand-bg);display:flex;align-items:center;justify-content:center;font-size:14px}
+.card-ttl{font-size:11px;font-weight:700;color:var(--dark);text-transform:uppercase;letter-spacing:.5px}
+.card-body{padding:16px}
+
+/* STEPS */
+.steps{background:#fff;border-radius:var(--r);padding:12px 16px;box-shadow:var(--shadow);margin-bottom:14px;display:flex;align-items:center}
+.step{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative}
+.step:not(:last-child)::after{content:'';position:absolute;top:12px;left:50%;width:100%;height:2px;background:var(--border);z-index:0}
+.step.done:not(:last-child)::after,.step.active:not(:last-child)::after{background:var(--brand)}
+.sc{width:24px;height:24px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--light);z-index:1;position:relative}
+.step.done .sc{background:var(--brand);color:#fff}
+.step.active .sc{background:var(--brand);color:#fff;box-shadow:0 0 0 4px rgba(123,63,26,.15)}
+.sl{font-size:9px;text-align:center;color:var(--light);white-space:nowrap}
+.step.active .sl{color:var(--brand);font-weight:700}
+.step.done .sl{color:var(--mid)}
+
+/* FORM */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fg3{grid-template-columns:1fr 1fr 1fr}
+.fgrp{display:flex;flex-direction:column;gap:3px}
+.fgrp.full{grid-column:1/-1}
+label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--mid)}
+input[type=text],input[type=email],input[type=number],input[type=date],select,textarea{
+  border:1.5px solid var(--border);border-radius:7px;padding:8px 11px;font-size:13px;
+  font-family:var(--font);color:var(--dark);background:#fff;transition:border-color .2s;width:100%;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(123,63,26,.08)}
+input[readonly]{background:#F9F7F5;color:var(--mid)}
+textarea{resize:vertical;min-height:54px}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;padding-right:30px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:9px 15px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;font-family:var(--font)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn-p{background:var(--brand);color:#fff}.btn-p:hover:not(:disabled){background:#5C2F14}
+.btn-s{background:var(--brand-bg);color:var(--brand);border:1.5px solid #E8D0BC}.btn-s:hover:not(:disabled){background:#EDD8C8}
+.btn-g{background:transparent;color:var(--mid);border:1.5px solid var(--border)}.btn-g:hover:not(:disabled){background:#F5F0EB}
+.btn-b{background:#EFF6FF;color:var(--blue);border:1.5px solid #BFDBFE}.btn-b:hover:not(:disabled){background:#DBEAFE}
+.btn-d{background:#FEF2F2;color:var(--red);border:1.5px solid #FCA5A5}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn-row{display:flex;gap:7px;flex-wrap:wrap}
+
+/* PROMO CARDS */
+.pcards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pcard{border:2px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .2s;text-align:center}
+.pcard:hover{border-color:var(--brand-l);background:var(--brand-bg)}
+.pcard.sel{border-color:var(--brand);background:var(--brand-bg);box-shadow:0 0 0 3px rgba(123,63,26,.1)}
+.pcard-ico{font-size:28px;margin-bottom:6px}
+.pcard-ttl{font-weight:700;font-size:13px}
+.pcard-sub{font-size:11px;color:var(--mid);margin-top:2px}
+
+/* TRAMO */
+.tramo-grid{display:flex;gap:7px;flex-wrap:wrap}
+.tbtn{flex:1;min-width:75px;padding:10px 6px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;text-align:center;transition:all .2s}
+.tbtn:hover{border-color:var(--brand-l);background:var(--brand-bg)}
+.tbtn.sel{border-color:var(--brand);background:var(--brand-bg)}
+.tuds{font-size:16px;font-weight:800;color:var(--dark)}
+.tprice{font-size:11px;color:var(--mid)}
+.tbonus{font-size:10px;color:var(--green);font-weight:700;margin-top:2px}
+
+/* TIER */
+.tier-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.tcard{border:2px solid var(--border);border-radius:var(--r);padding:12px;cursor:pointer;transition:all .2s}
+.tcard:hover{border-color:var(--brand-l);background:var(--brand-bg)}
+.tcard.sel{border-color:var(--brand);background:var(--brand-bg)}
+.tl{font-size:22px;font-weight:800;font-family:var(--font-d);color:var(--brand)}
+.tmin{font-size:11px;color:var(--mid)}
+.tdto{font-size:13px;font-weight:700;color:var(--green);margin:3px 0}
+.tpago{font-size:10px;color:var(--light)}
+
+/* SUMMARY */
+.sbox{background:var(--brand-bg);border:1.5px solid #E8D0BC;border-radius:var(--r);padding:13px;margin-top:10px}
+.srow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(123,63,26,.08)}
+.srow:last-child{border-bottom:none}
+.slbl{font-size:12px;color:var(--mid)}
+.sval{font-size:13px;font-weight:600}
+.sval.hi{color:var(--brand);font-size:15px}
+.sval.bon{color:var(--green)}
+
+/* CONDITIONS */
+.cbox{background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:var(--r);padding:12px;margin-top:10px}
+.cbox-ttl{font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.cbox-body{font-size:12px;color:#166534;line-height:1.9}
+
+/* CATEGORIES */
+.crow{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)}
+.crow:last-child{border-bottom:none}
+.ccheck{width:17px;height:17px;border:2px solid var(--border);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:11px}
+.ccheck.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.cname{flex:1;font-size:13px;font-weight:500}
+.cobs{flex:2;border:1.5px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px;font-family:var(--font);color:var(--dark);background:#fff}
+.cobs:focus{outline:none;border-color:var(--brand)}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.stat{background:#fff;border-radius:var(--r);padding:14px;box-shadow:var(--shadow);text-align:center}
+.stn{font-size:24px;font-weight:800;font-family:var(--font-d);color:var(--brand)}
+.stl{font-size:10px;color:var(--light);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+/* FILTERS */
+.fbar{background:#fff;border-radius:var(--r);padding:10px 12px;box-shadow:var(--shadow);margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.fbar select,.fbar input{flex:1;min-width:100px;padding:6px 9px;font-size:13px}
+
+/* LIST */
+.olist{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.oitem{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border);transition:background .15s}
+.oitem:last-child{border-bottom:none}
+.oitem:hover{background:#FDF9F5}
+.ofarm{font-weight:600;font-size:13px}
+.ometa{font-size:11px;color:var(--mid);margin-top:2px}
+.oacts{display:flex;gap:4px}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap}
+.b-nav{background:#FFF7ED;color:#C2410C;border:1px solid #FED7AA}
+.b-nue{background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE}
+.b-con{background:#F0FDF4;color:#15803D;border:1px solid #BBF7D0}
+.b-bor{background:#FFFBEB;color:#B45309;border:1px solid #FDE68A}
+.b-sync{background:#F5F3FF;color:#7C3AED;border:1px solid #DDD6FE}
+
+/* MODAL */
+.mover{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:12px}
+.modal{background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.2);width:100%;max-width:660px;max-height:90vh;overflow-y:auto}
+.mhdr{padding:16px 20px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1}
+.mttl{font-size:15px;font-weight:700}
+.mcls{width:28px;height:28px;border-radius:6px;border:none;background:var(--border);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--mid)}
+.mbody{padding:20px}
+.mfoot{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+
+/* ALERTS */
+.alert{padding:10px 13px;border-radius:8px;font-size:12px;margin-bottom:12px;line-height:1.6}
+.a-info{background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE}
+.a-warn{background:#FFFBEB;color:#92400E;border:1px solid #FDE68A}
+.a-ok{background:#F0FDF4;color:#166534;border:1px solid #BBF7D0}
+.a-err{background:#FEF2F2;color:#991B1B;border:1px solid #FCA5A5}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--dark);color:#fff;padding:10px 16px;border-radius:var(--r);font-size:13px;font-weight:500;box-shadow:0 8px 30px rgba(0,0,0,.2);z-index:300;transform:translateY(80px);opacity:0;transition:all .3s;max-width:320px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.ok{background:#166534}.toast.err{background:#991B1B}.toast.warn{background:#92400E}
+
+/* SYNC LOG */
+.slog{background:#F9F7F5;border-radius:8px;padding:12px;font-size:11px;color:var(--mid);max-height:160px;overflow-y:auto;font-family:monospace;line-height:1.8;margin-top:10px}
+.slog-ok{color:var(--green)}.slog-err{color:var(--red)}.slog-inf{color:var(--blue)}
+
+/* MISC */
+hr{border:none;border-top:1px solid var(--border);margin:13px 0}
+.sec-ttl{font-size:10px;font-weight:700;color:var(--light);text-transform:uppercase;letter-spacing:.8px;margin-bottom:9px}
+.empty{text-align:center;padding:40px 20px;color:var(--light)}
+.empty-ico{font-size:40px;margin-bottom:8px}
+.empty-ttl{font-size:14px;font-weight:600;color:var(--mid)}
+.empty-sub{font-size:12px;margin-top:3px}
+.mt8{margin-top:8px}.mt14{margin-top:14px}.mb14{margin-bottom:14px}
+.jb{justify-content:space-between}
+
+/* CODE */
+.codebox{background:#1C1917;color:#F5E6D3;border-radius:8px;padding:12px;font-size:11px;font-family:monospace;line-height:1.7;overflow-x:auto;margin:8px 0}
+
+/* PRINT */
+@media print{
+  .hdr,.nav,.btn,.oacts,.fbar,.stats,.mfoot,.mcls,.steps,.ppill,.syncbar{display:none!important}
+  .mover{position:static;background:none;padding:0}
+  .modal{box-shadow:none;max-height:none;max-width:none}
+  .mhdr{position:static}
+  body{background:#fff;font-size:12px}
+  .ph{text-align:center;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--brand)}
+  .plogo{font-family:var(--font-d);font-size:20px;font-weight:bold;color:var(--brand)}
+}
+.ph{display:none}
+
+@media(max-width:580px){
+  .stats{grid-template-columns:1fr 1fr}
+  .pcards{grid-template-columns:1fr}
+  .tier-grid{grid-template-columns:1fr}
+  .fg{grid-template-columns:1fr}
+  .oitem{grid-template-columns:1fr}
+  .oacts{margin-top:5px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-logo">Betrés ON <span>·</span> Infarma 2026</div>
+  <div class="hdr-r">
+    <div id="ppill" class="ppill" style="display:none"></div>
+    <div id="sbadge" class="sbadge s-off" onclick="manualSync()" title="Pulsa para sincronizar">
+      <div id="sdot" class="sdot pulse"></div>
+      <span id="stxt">Sin conexión</span>
+    </div>
+  </div>
+</header>
+
+<nav class="nav">
+  <div class="ntab active" id="tab-nuevo" onclick="showView('nuevo',this)">✏️ Nuevo Pedido</div>
+  <div class="ntab" id="tab-dashboard" onclick="showView('dashboard',this)">📋 Pedidos <span id="obadge" class="nbadge">0</span></div>
+  <div class="ntab" id="tab-config" onclick="showView('config',this)">⚙️ Configuración</div>
+</nav>
+
+<div id="toast" class="toast"></div>
+
+<!-- ===== VIEW: NUEVO PEDIDO ===== -->
+<div id="view-nuevo" class="view active">
+<div class="wrap">
+
+  <div class="steps" id="stepsbar">
+    <div class="step active" id="sp1"><div class="sc">1</div><div class="sl">Tipo</div></div>
+    <div class="step" id="sp2"><div class="sc">2</div><div class="sl">Cliente</div></div>
+    <div class="step" id="sp3"><div class="sc">3</div><div class="sl">Pedido</div></div>
+    <div class="step" id="sp4"><div class="sc">4</div><div class="sl">Mix</div></div>
+    <div class="step" id="sp5"><div class="sc">5</div><div class="sl">Confirmar</div></div>
+  </div>
+
+  <!-- S1 -->
+  <div id="fs1">
+    <div class="card">
+      <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">👤</div><div class="card-ttl">Comercial y tipo de promoción</div></div></div>
+      <div class="card-body">
+        <div class="fgrp mb14"><label>Comercial que recoge el pedido *</label><select id="sel-com"><option value="">— Selecciona —</option></select></div>
+        <div class="sec-ttl">Tipo de promoción</div>
+        <div class="pcards">
+          <div class="pcard" id="pc-nav" onclick="selTipo('navidad',this)"><div class="pcard-ico">🎄</div><div class="pcard-ttl">Promoción Navidad</div><div class="pcard-sub">Tramos 18–1.008 uds · Precio escalado</div></div>
+          <div class="pcard" id="pc-nue" onclick="selTipo('nuevas',this)"><div class="pcard-ico">🏪</div><div class="pcard-ttl">Nuevas Aperturas</div><div class="pcard-sub">Promo M / L / XL · Por PVL</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row" style="justify-content:flex-end"><button class="btn btn-p" onclick="goStep(2)">Continuar →</button></div>
+  </div>
+
+  <!-- S2 -->
+  <div id="fs2" style="display:none">
+    <div class="card">
+      <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">🏥</div><div class="card-ttl">Datos del cliente</div></div></div>
+      <div class="card-body">
+        <div class="fg">
+          <div class="fgrp full"><label>Farmacia / Empresa *</label><input type="text" id="c-far" placeholder="Farmacia García"></div>
+          <div class="fgrp"><label>Código cliente (SAP)</label><input type="text" id="c-cod" placeholder="SAP001"></div>
+          <div class="fgrp"><label>CIF / NIF *</label><input type="text" id="c-cif" placeholder="B12345678"></div>
+          <div class="fgrp"><label>Grupo de compra</label><input type="text" id="c-grp" placeholder="Alliance, Farmacoop…"></div>
+          <div class="fgrp"><label>Provincia / Ciudad</label><input type="text" id="c-prv" placeholder="Madrid"></div>
+          <div class="fgrp"><label>Contacto</label><input type="text" id="c-cto" placeholder="Nombre responsable"></div>
+          <div class="fgrp"><label>Teléfono</label><input type="text" id="c-tel" placeholder="+34 600 000 000"></div>
+          <div class="fgrp full"><label>Email cliente</label><input type="email" id="c-eml" placeholder="farmacia@ejemplo.com"></div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row jb"><button class="btn btn-g" onclick="goStep(1)">← Atrás</button><button class="btn btn-p" onclick="goStep(3)">Continuar →</button></div>
+  </div>
+
+  <!-- S3 NAVIDAD -->
+  <div id="fs3n" style="display:none">
+    <div class="card">
+      <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">🎄</div><div class="card-ttl">Promoción Navidad · Condiciones</div></div></div>
+      <div class="card-body">
+        <div class="sec-ttl">Tramo seleccionado</div>
+        <div class="tramo-grid">
+          <div class="tbtn" onclick="selTramo(18,this)"><div class="tuds">18</div><div class="tprice">1,17 €/ud</div></div>
+          <div class="tbtn" onclick="selTramo(126,this)"><div class="tuds">126</div><div class="tprice">1,14 €/ud</div></div>
+          <div class="tbtn" onclick="selTramo(252,this)"><div class="tuds">252</div><div class="tprice">1,10 €/ud</div></div>
+          <div class="tbtn" onclick="selTramo(504,this)"><div class="tuds">504</div><div class="tprice">1,05 €/ud</div><div class="tbonus">+40 uds sin cargo</div></div>
+          <div class="tbtn" onclick="selTramo(1008,this)"><div class="tuds">1.008</div><div class="tprice">0,98 €/ud</div><div class="tbonus">MEJOR PRECIO</div></div>
+        </div>
+        <div id="nav-sum" class="sbox" style="display:none">
+          <div class="srow"><span class="slbl">Uds facturadas</span><span class="sval" id="s-uf">—</span></div>
+          <div class="srow" id="sr-bon" style="display:none"><span class="slbl">Uds sin cargo</span><span class="sval bon" id="s-bon">—</span></div>
+          <div class="srow" id="sr-tot" style="display:none"><span class="slbl">Uds totales entregadas</span><span class="sval" id="s-tot">—</span></div>
+          <div class="srow"><span class="slbl">Precio / unidad</span><span class="sval" id="s-prc">—</span></div>
+          <div class="srow"><span class="slbl">Importe pedido</span><span class="sval hi" id="s-imp">—</span></div>
+          <div class="srow"><span class="slbl">Forma de pago</span><span class="sval">60 días desde el envío</span></div>
+        </div>
+        <div id="nav-cnd" class="cbox" style="display:none"><div class="cbox-ttl">✓ Condiciones aplicables</div><div class="cbox-body" id="cnd-txt"></div></div>
+        <hr>
+        <div class="fg">
+          <div class="fgrp"><label>Tipo de entrega</label><select id="nav-ent"><option value="tras_feria">Tras feria</option><option value="programada">Programada</option></select></div>
+          <div class="fgrp"><label>Fecha envío prevista</label><input type="date" id="nav-fenv"></div>
+          <div class="fgrp full"><label>Observaciones</label><textarea id="nav-obs" placeholder="Notas…"></textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row jb"><button class="btn btn-g" onclick="goStep(2)">← Atrás</button><button class="btn btn-p" onclick="goStep(4)">Continuar →</button></div>
+  </div>
+
+  <!-- S3 NUEVAS -->
+  <div id="fs3a" style="display:none">
+    <div class="card">
+      <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">🏪</div><div class="card-ttl">Nuevas Aperturas · Condiciones</div></div></div>
+      <div class="card-body">
+        <div class="sec-ttl">Promoción seleccionada</div>
+        <div class="tier-grid">
+          <div class="tcard" onclick="selTier('M',this)"><div class="tl">M</div><div class="tmin">Mín. 600 € PVL</div><div class="tdto">5% descuento</div><div class="tpago">Pago 60 días</div></div>
+          <div class="tcard" onclick="selTier('L',this)"><div class="tl">L</div><div class="tmin">Mín. 1.000 € PVL</div><div class="tdto">8% descuento</div><div class="tpago">Pago 30-60 días</div></div>
+          <div class="tcard" onclick="selTier('XL',this)"><div class="tl">XL</div><div class="tmin">Mín. 1.500 € PVL</div><div class="tdto">10% descuento</div><div class="tpago">Pago 30-60-85 días</div></div>
+        </div>
+        <div id="na-pvl-sec" style="display:none;margin-top:14px">
+          <div class="fg">
+            <div class="fgrp"><label>PVL pedido (€) *</label><input type="number" id="na-pvl" placeholder="1500.00" min="0" step="0.01" oninput="calcNA()"></div>
+            <div class="fgrp"><label>Forma de pago</label><input type="text" id="na-pago" readonly></div>
+          </div>
+          <div id="na-sum" class="sbox" style="display:none">
+            <div class="srow"><span class="slbl">PVL pedido</span><span class="sval" id="na-pvl-v">—</span></div>
+            <div class="srow"><span class="slbl">Descuento directo</span><span class="sval bon" id="na-dto-v">—</span></div>
+            <div class="srow"><span class="slbl">Importe descuento</span><span class="sval bon" id="na-imp-v">—</span></div>
+            <div class="srow"><span class="slbl">PVL neto</span><span class="sval hi" id="na-net-v">—</span></div>
+          </div>
+          <div id="na-cnd" class="cbox" style="margin-top:10px"><div class="cbox-ttl">✓ Condiciones aplicables</div><div class="cbox-body" id="na-cnd-txt"></div></div>
+        </div>
+        <hr>
+        <div class="fg">
+          <div class="fgrp"><label>Tipo de entrega</label><select id="na-ent"><option value="tras_feria">Tras feria</option><option value="programada">Programada</option></select></div>
+          <div class="fgrp"><label>Fecha envío prevista</label><input type="date" id="na-fenv"></div>
+          <div class="fgrp full"><label>Observaciones</label><textarea id="na-obs" placeholder="Notas…"></textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-row jb"><button class="btn btn-g" onclick="goStep(2)">← Atrás</button><button class="btn btn-p" onclick="goStep(4)">Continuar →</button></div>
+  </div>
+
+  <!-- S4 MIX -->
+  <div id="fs4" style="display:none">
+    <div class="card">
+      <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">📦</div><div class="card-ttl">Mix del pedido / Implantación</div></div></div>
+      <div class="card-body" id="cats-body"></div>
+    </div>
+    <div class="btn-row jb"><button class="btn btn-g" onclick="goStep(3)">← Atrás</button><button class="btn btn-p" onclick="goStep(5)">Continuar →</button></div>
+  </div>
+
+  <!-- S5 CONFIRM -->
+  <div id="fs5" style="display:none">
+    <div class="card">
+      <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">✅</div><div class="card-ttl">Resumen y confirmación</div></div></div>
+      <div class="card-body" id="conf-body"></div>
+    </div>
+    <div class="btn-row jb">
+      <button class="btn btn-g" onclick="goStep(4)">← Atrás</button>
+      <div class="btn-row">
+        <button class="btn btn-s" onclick="savePed('borrador')">💾 Borrador</button>
+        <button class="btn btn-p" onclick="savePed('confirmado')">✅ Confirmar pedido</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ===== VIEW: DASHBOARD ===== -->
+<div id="view-dashboard" class="view">
+<div class="wrap">
+
+  <div id="syncbar" class="syncbar">
+    <div class="syncbar-l">
+      <div id="si" class="sync-indicator si-ok"></div>
+      <span id="sync-lbl">Última sincronización: —</span>
+    </div>
+    <div class="syncbar-r">
+      <button class="btn btn-b btn-sm" id="syncbtn" onclick="manualSync()">🔄 Sincronizar ahora</button>
+      <button class="btn btn-s btn-sm" onclick="exportCSV()">⬇️ CSV</button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stn" id="st-tot">0</div><div class="stl">Total pedidos</div></div>
+    <div class="stat"><div class="stn" id="st-nav" style="color:#C2410C">0</div><div class="stl">Navidad</div></div>
+    <div class="stat"><div class="stn" id="st-nue" style="color:#1D4ED8">0</div><div class="stl">Nuevas Apert.</div></div>
+    <div class="stat"><div class="stn" id="st-vol" style="font-size:18px">0 €</div><div class="stl">Vol. confirmado</div></div>
+  </div>
+
+  <div class="fbar">
+    <input type="text" id="f-srch" placeholder="🔍 Buscar farmacia…" oninput="renderDash()">
+    <select id="f-com" onchange="renderDash()"><option value="">Todos los comerciales</option></select>
+    <select id="f-tip" onchange="renderDash()"><option value="">Todos los tipos</option><option value="navidad">Navidad</option><option value="nuevas">Nuevas Aperturas</option></select>
+    <select id="f-est" onchange="renderDash()"><option value="">Todos los estados</option><option value="confirmado">Confirmados</option><option value="borrador">Borradores</option></select>
+  </div>
+
+  <div class="olist" id="olist">
+    <div class="empty"><div class="empty-ico">📋</div><div class="empty-ttl">Sin pedidos</div><div class="empty-sub">Los pedidos aparecerán aquí</div></div>
+  </div>
+</div>
+</div>
+
+<!-- ===== VIEW: CONFIG ===== -->
+<div id="view-config" class="view">
+<div class="wrap">
+
+  <div class="card">
+    <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">👥</div><div class="card-ttl">Equipo comercial</div></div></div>
+    <div class="card-body">
+      <div class="fgrp mb14"><label>Comerciales (uno por línea)</label><textarea id="coms-inp" rows="6" placeholder="Irene García&#10;Carlos Martínez&#10;Ana López"></textarea></div>
+      <button class="btn btn-p" onclick="saveComs()">Guardar equipo</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">🔗</div><div class="card-ttl">Conexión n8n · Sincronización</div></div></div>
+    <div class="card-body">
+      <div class="alert a-info">
+        <strong>Cómo funciona:</strong> La app guarda todos los pedidos localmente aunque no haya conexión. Cuando hay conexión, sincroniza automáticamente con n8n en dos sentidos: <strong>sube</strong> los pedidos nuevos y <strong>descarga</strong> los pedidos de los demás comerciales.<br><br>
+        Necesitas dos webhooks en n8n: uno <strong>POST</strong> para recibir pedidos y uno <strong>GET</strong> para devolver el listado completo.
+      </div>
+      <div class="fg">
+        <div class="fgrp full"><label>Webhook POST (guardar pedido)</label><input type="text" id="wh-post" placeholder="https://natulab.app.n8n.cloud/webhook/betres-pedido"></div>
+        <div class="fgrp full"><label>Webhook GET (obtener todos los pedidos)</label><input type="text" id="wh-get" placeholder="https://natulab.app.n8n.cloud/webhook/betres-pedidos"></div>
+        <div class="fgrp full"><label>Email para notificaciones</label><input type="email" id="notif-eml" placeholder="irene@natu.es"></div>
+      </div>
+      <div class="btn-row mt8">
+        <button class="btn btn-p" onclick="saveCfg()">Guardar config</button>
+        <button class="btn btn-b" onclick="testSync()">🧪 Probar conexión</button>
+      </div>
+      <div id="sync-log" class="slog" style="display:none"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">📋</div><div class="card-ttl">Workflow n8n · Instrucciones</div></div></div>
+    <div class="card-body">
+      <div class="alert a-warn">Importa el archivo <strong>n8n_betres_infarma.json</strong> en tu instancia de n8n. Encontrarás también el archivo descargado junto a esta app.</div>
+      <p style="font-size:12px;color:var(--mid);line-height:1.8;margin-bottom:10px">El workflow tiene <strong>3 flujos</strong>:</p>
+      <div style="font-size:12px;line-height:2;color:var(--dark)">
+        <div>📥 <strong>Recibir pedido</strong> (POST) → Upsert en Google Sheets → Respuesta JSON</div>
+        <div>📤 <strong>Devolver pedidos</strong> (GET) → Leer Google Sheets → Respuesta JSON</div>
+        <div>📧 <strong>Notificación</strong> (trigger automático) → Email resumen del día</div>
+      </div>
+      <p style="font-size:12px;color:var(--mid);margin-top:10px">Crea una hoja de cálculo en Google Sheets con este nombre exacto: <strong>PedidosInfarma2026</strong> y deja que n8n cree las columnas automáticamente en el primer pedido.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">🗂️</div><div class="card-ttl">Gestión de datos</div></div></div>
+    <div class="card-body">
+      <div class="btn-row">
+        <button class="btn btn-s" onclick="exportCSV()">⬇️ Exportar CSV</button>
+        <button class="btn btn-d btn-sm" onclick="clearAll()">🗑️ Borrar datos locales</button>
+      </div>
+      <div id="sq-info" style="margin-top:10px;font-size:12px;color:var(--mid)"></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="mover" style="display:none" onclick="if(event.target===this)closeM()">
+  <div class="modal">
+    <div class="mhdr"><div class="mttl" id="m-ttl">Pedido</div><button class="mcls" onclick="closeM()">×</button></div>
+    <div class="mbody" id="m-body"></div>
+    <div class="mfoot" id="m-foot"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+let TIPO=null,TRAMO=null,TIER=null,CATS={},PEDS=[],db=null;
+let isSyncing=false,lastSync=null;
+
+const TN=[{u:18,p:1.17,b:0},{u:126,p:1.14,b:0},{u:252,p:1.10,b:0},{u:504,p:1.05,b:40},{u:1008,p:0.98,b:0}];
+const TA={
+  M:{min:600,d:.05,pago:'60 días',rep:'5% durante 60 días',conds:['5% descuento directo sobre el pedido','5% en reposición durante 60 días','Testers incluidos en perfumes 100ml (1 c/ 2 cajas misma ref.)','Geles máx. 20% del pedido (hasta 120 € PVL)','Pago a 60 días','Requisito: mín. 50% en perfumería 100ml, Oriental o ambientación']},
+  L:{min:1000,d:.08,pago:'30-60 días',rep:'8% durante 90 días',conds:['8% descuento directo sobre el pedido','8% en reposición durante 90 días','Expositores sobremesa incluidos','2 cajas de 30ml sin cargo','Geles máx. 15% del pedido (hasta 150 € PVL)','Pago 30-60 días','Requisito: mín. 50% en perfumería 100ml u Oriental']},
+  XL:{min:1500,d:.10,pago:'30-60-85 días',rep:'10% durante 90 días',conds:['10% descuento directo sobre el pedido','10% en reposición durante 90 días','3% rappel anual si supera 6.000 €','Geles máx. 10% del pedido (hasta 150 € PVL)','Pago 30-60-85 días','Requisito: mín. 60% en perfumería 100ml, Oriental o ambientación']}
+};
+const CN=[{id:'per100',lbl:'Perfumería Betrés ON 100 ml'},{id:'oriental',lbl:'Colección Oriental'},{id:'mikado',lbl:'Colección Mikado Esencial'},{id:'bodymist',lbl:'Body Mist'},{id:'mascotas',lbl:'Categoría Mascotas'},{id:'packduo',lbl:'Pack Duo (+3 cajas completas)'}];
+const CA=[{id:'per100',lbl:'Perfumería Betrés ON 100 ml'},{id:'oriental',lbl:'Colección Oriental'},{id:'ambient',lbl:'Ambientación'},{id:'geles',lbl:'Geles'},{id:'per30',lbl:'Perfumería 30 ml'},{id:'expositor',lbl:'Expositor / Material PLV'}];
+
+// ══════════════════════════════════════════
+// INDEXED DB
+// ══════════════════════════════════════════
+function initDB(){
+  return new Promise((res,rej)=>{
+    const r=indexedDB.open('betresonDB',4);
+    r.onupgradeneeded=e=>{
+      const d=e.target.result;
+      if(!d.objectStoreNames.contains('peds'))d.createObjectStore('peds',{keyPath:'id'});
+      if(!d.objectStoreNames.contains('cfg'))d.createObjectStore('cfg',{keyPath:'k'});
+      if(!d.objectStoreNames.contains('sq'))d.createObjectStore('sq',{keyPath:'id'});
+    };
+    r.onsuccess=e=>{db=e.target.result;res(db);};
+    r.onerror=()=>rej(r.error);
+  });
+}
+const dbPut=(s,v)=>new Promise((res,rej)=>{const t=db.transaction(s,'readwrite'),r=t.objectStore(s).put(v);r.onsuccess=()=>res();r.onerror=()=>rej();});
+const dbAll=(s)=>new Promise((res,rej)=>{const t=db.transaction(s,'readonly'),r=t.objectStore(s).getAll();r.onsuccess=()=>res(r.result);r.onerror=()=>rej();});
+const dbGet=(s,k)=>new Promise((res,rej)=>{const t=db.transaction(s,'readonly'),r=t.objectStore(s).get(k);r.onsuccess=()=>res(r.result);r.onerror=()=>rej();});
+const dbDel=(s,k)=>new Promise((res,rej)=>{const t=db.transaction(s,'readwrite'),r=t.objectStore(s).delete(k);r.onsuccess=()=>res();r.onerror=()=>rej();});
+
+// ══════════════════════════════════════════
+// SYNC ENGINE — bidireccional
+// ══════════════════════════════════════════
+async function syncAll(silent=false){
+  if(isSyncing)return;
+  const cfg=await getCfg();
+  if(!cfg.whPost||!cfg.whGet){
+    if(!silent)logSync('err','⚠️ Configura los webhooks de n8n antes de sincronizar');
+    return;
+  }
+  if(!navigator.onLine){
+    if(!silent)logSync('inf','Sin conexión · Los pedidos se sincronizarán al conectarse');
+    return;
+  }
+  isSyncing=true;
+  setSyncStatus('syncing');
+  try{
+    // 1. PUSH — subir pedidos pendientes
+    const sq=await dbAll('sq');
+    let pushed=0;
+    for(const item of sq){
+      const p=PEDS.find(x=>x.id===item.id);
+      if(!p){await dbDel('sq',item.id);continue;}
+      try{
+        const r=await fetch(cfg.whPost,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'upsert',pedido:p})});
+        if(r.ok){p.sync=true;await dbPut('peds',p);await dbDel('sq',item.id);pushed++;}
+        else logSync('err','Error subiendo '+p.id+': HTTP '+r.status);
+      }catch(e){logSync('err','Error de red subiendo '+p.id);}
+    }
+    if(pushed>0)logSync('ok','↑ '+pushed+' pedido(s) subido(s) a Google Sheets');
+
+    // 2. PULL — descargar pedidos de otros comerciales
+    const r2=await fetch(cfg.whGet+'?source=app&t='+Date.now(),{method:'GET'});
+    if(!r2.ok){logSync('err','Error descargando pedidos: HTTP '+r2.status);return;}
+    const remote=await r2.json(); // array de pedidos
+    const remotePeds=Array.isArray(remote)?remote:(remote.pedidos||[]);
+    let pulled=0,updated=0;
+    for(const rp of remotePeds){
+      if(!rp||!rp.id)continue;
+      const local=PEDS.find(x=>x.id===rp.id);
+      if(!local){
+        rp.sync=true;await dbPut('peds',rp);pulled++;
+      } else if((rp.ts||0)>(local.ts||0)){
+        rp.sync=true;await dbPut('peds',rp);updated++;
+      }
+    }
+    if(pulled>0||updated>0)logSync('ok','↓ '+pulled+' nuevos + '+updated+' actualizados desde Google Sheets');
+
+    PEDS=await dbAll('peds');
+    lastSync=new Date();
+    await dbPut('cfg',{k:'lastSync',v:lastSync.toISOString()});
+    updSyncUI();updBadge();
+    if(!silent)renderDash();
+    logSync('ok','✓ Sincronización completada · '+new Date().toLocaleTimeString('es-ES'));
+  }catch(e){
+    logSync('err','Error inesperado: '+e.message);
+    setSyncStatus('err');
+  }finally{
+    isSyncing=false;
+    setSyncStatus(navigator.onLine?'ok':'off');
+    await updPP();
+  }
+}
+
+async function manualSync(){
+  if(!navigator.onLine){toast('Sin conexión. Los pedidos están guardados localmente.','warn');return;}
+  await syncAll(false);
+  renderDash();
+}
+
+async function testSync(){
+  const cfg=await getCfg();
+  const log=document.getElementById('sync-log');
+  log.style.display='block';log.innerHTML='';
+  if(!cfg.whPost||!cfg.whGet){logSync('err','Configura ambas URLs antes de probar');return;}
+  logSync('inf','Probando POST webhook…');
+  try{
+    const r=await fetch(cfg.whPost,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'test',source:'BetresON',ts:new Date().toISOString()})});
+    logSync(r.ok?'ok':'err','POST: '+r.status+(r.ok?' ✓':' ✗'));
+  }catch{logSync('err','POST: no se pudo conectar');}
+  logSync('inf','Probando GET webhook…');
+  try{
+    const r=await fetch(cfg.whGet+'?source=test&t='+Date.now());
+    logSync(r.ok?'ok':'err','GET: '+r.status+(r.ok?' ✓':' ✗'));
+    if(r.ok){const d=await r.json();logSync('inf','GET devuelve: '+JSON.stringify(d).substr(0,80)+'…');}
+  }catch{logSync('err','GET: no se pudo conectar');}
+}
+
+function logSync(type,msg){
+  const el=document.getElementById('sync-log');
+  if(!el)return;
+  el.style.display='block';
+  const cls=type==='ok'?'slog-ok':type==='err'?'slog-err':'slog-inf';
+  el.innerHTML+=`<div class="${cls}">[${new Date().toLocaleTimeString('es-ES')}] ${msg}</div>`;
+  el.scrollTop=el.scrollHeight;
+}
+
+function setSyncStatus(s){
+  const b=document.getElementById('sbadge'),d=document.getElementById('sdot'),t=document.getElementById('stxt'),si=document.getElementById('si');
+  if(s==='ok'){b.className='sbadge s-on';d.className='sdot';t.textContent='Conectado';si&&(si.className='sync-indicator si-ok');}
+  else if(s==='off'){b.className='sbadge s-off';d.className='sdot pulse';t.textContent='Sin conexión';si&&(si.className='sync-indicator si-pend');}
+  else if(s==='syncing'){b.className='sbadge s-sync';d.className='sdot spin';t.textContent='Sincronizando…';}
+  else{b.className='sbadge s-off';d.className='sdot pulse';t.textContent='Error sync';si&&(si.className='sync-indicator si-err');}
+}
+
+function updSyncUI(){
+  const el=document.getElementById('sync-lbl');
+  if(!el)return;
+  el.textContent=lastSync?'Última sync: '+lastSync.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}):'Última sync: —';
+}
+
+async function updPP(){
+  const q=await dbAll('sq');
+  const el=document.getElementById('ppill');
+  const qi=document.getElementById('sq-info');
+  if(q.length){el.textContent=q.length+'↑ pendiente'+(q.length>1?'s':'');el.style.display='block';}
+  else{el.style.display='none';}
+  if(qi)qi.textContent=q.length?`${q.length} pedido(s) pendientes de subir a n8n. Se enviarán al recuperar conexión.`:'✓ Todos los datos locales están sincronizados con n8n';
+}
+
+// Auto-sync cada 30s si hay conexión
+setInterval(()=>{if(navigator.onLine&&!isSyncing)syncAll(true);},30000);
+
+window.addEventListener('online',async()=>{
+  updStatus();
+  await syncAll(false);
+  renderDash();
+  toast('✅ Conexión recuperada · Sincronizando…','ok');
+});
+window.addEventListener('offline',()=>{updStatus();toast('⚠️ Sin conexión · Pedidos guardados localmente','warn');});
+function updStatus(){setSyncStatus(navigator.onLine?'ok':'off');}
+
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+function showView(v,el){
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.ntab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  if(el)el.classList.add('active');
+  if(v==='dashboard')renderDash();
+  if(v==='config'){document.getElementById('sync-log').style.display='none';}
+}
+
+// ══════════════════════════════════════════
+// STEP NAVIGATION
+// ══════════════════════════════════════════
+function goStep(n){
+  const com=document.getElementById('sel-com').value;
+  const far=document.getElementById('c-far').value.trim();
+  if(n>1&&!TIPO){toast('Selecciona un tipo de promoción','err');return;}
+  if(n>1&&!com){toast('Selecciona un comercial','err');return;}
+  if(n>2&&!far){toast('Introduce el nombre de la farmacia','err');return;}
+  if(n>3&&TIPO==='navidad'&&!TRAMO){toast('Selecciona un tramo','err');return;}
+  if(n>3&&TIPO==='nuevas'&&!TIER){toast('Selecciona una promoción M/L/XL','err');return;}
+  if(n>3&&TIPO==='nuevas'){
+    const pvl=parseFloat(document.getElementById('na-pvl').value)||0;
+    if(!pvl){toast('Introduce el PVL del pedido','err');return;}
+    if(pvl<TA[TIER].min){toast('⚠️ PVL inferior al mínimo de '+TA[TIER].min+'€ para tarifa '+TIER,'warn');return;}
+  }
+  ['fs1','fs2','fs3n','fs3a','fs4','fs5'].forEach(id=>document.getElementById(id).style.display='none');
+  for(let i=1;i<=5;i++){const el=document.getElementById('sp'+i);el.className='step'+(i<n?' done':i===n?' active':'');}
+  if(n===1)document.getElementById('fs1').style.display='block';
+  else if(n===2)document.getElementById('fs2').style.display='block';
+  else if(n===3){document.getElementById(TIPO==='navidad'?'fs3n':'fs3a').style.display='block';}
+  else if(n===4){renderCats();document.getElementById('fs4').style.display='block';}
+  else if(n===5){renderConf();document.getElementById('fs5').style.display='block';}
+  window.scrollTo(0,0);
+}
+
+// ══════════════════════════════════════════
+// FORM LOGIC
+// ══════════════════════════════════════════
+function selTipo(t,el){TIPO=t;TRAMO=null;TIER=null;document.getElementById('pc-nav').classList.toggle('sel',t==='navidad');document.getElementById('pc-nue').classList.toggle('sel',t==='nuevas');}
+
+function selTramo(u,el){
+  TRAMO=u;
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');
+  const tf=TN.find(x=>x.u===u),imp=u*tf.p;
+  document.getElementById('s-uf').textContent=u.toLocaleString('es-ES')+' uds';
+  document.getElementById('s-prc').textContent=tf.p.toFixed(2).replace('.',',')+' €/ud';
+  document.getElementById('s-imp').textContent=imp.toFixed(2).replace('.',',')+' €';
+  const bon=tf.b>0;
+  document.getElementById('sr-bon').style.display=bon?'flex':'none';
+  document.getElementById('sr-tot').style.display=bon?'flex':'none';
+  if(bon){document.getElementById('s-bon').textContent='+'+tf.b+' uds';document.getElementById('s-tot').textContent=(u+tf.b).toLocaleString('es-ES')+' uds';}
+  document.getElementById('nav-sum').style.display='block';
+  let c='';
+  if(u===1008)c='• 5% descuento implantación Colección Oriental<br>• 5% descuento 8 cajas completas Perfumería 100 ml<br>• 5% descuento implantación Colección Mikado Esencial<br>• 5% descuento implantación Body Mist<br>• 5% descuento implantación Categoría Mascotas<br>• 5% descuento Pack Duo (+3 cajas completas)';
+  else if(u===504)c='• 40 unidades sin cargo (8% producto adicional)<br>• 5% adicional en reposición antes del 31 de octubre';
+  else c='• Tarifa escalada de referencia<br>• Sin condiciones promocionales adicionales específicas de Infarma';
+  document.getElementById('cnd-txt').innerHTML=c;
+  document.getElementById('nav-cnd').style.display='block';
+}
+
+function selTier(t,el){
+  TIER=t;
+  document.querySelectorAll('.tcard').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');
+  const ta=TA[t];
+  document.getElementById('na-pago').value=ta.pago;
+  document.getElementById('na-pvl-sec').style.display='block';
+  document.getElementById('na-cnd-txt').innerHTML=ta.conds.map(c=>'• '+c).join('<br>');
+  calcNA();
+}
+function calcNA(){
+  if(!TIER)return;
+  const pvl=parseFloat(document.getElementById('na-pvl').value)||0;
+  if(!pvl){document.getElementById('na-sum').style.display='none';return;}
+  const ta=TA[TIER],dto=pvl*ta.d,net=pvl-dto;
+  const f=v=>v.toFixed(2).replace('.',',')+' €';
+  document.getElementById('na-pvl-v').textContent=f(pvl);
+  document.getElementById('na-dto-v').textContent=(ta.d*100)+'%';
+  document.getElementById('na-imp-v').textContent='−'+f(dto);
+  const nEl=document.getElementById('na-net-v');
+  nEl.textContent=f(net);
+  const s=document.getElementById('na-sum');s.style.display='block';
+  if(pvl<ta.min){s.style.background='#FEF2F2';s.style.borderColor='#FCA5A5';nEl.style.color='var(--red)';}
+  else{s.style.background='';s.style.borderColor='';nEl.style.color='';}
+}
+
+function renderCats(){
+  const cats=TIPO==='navidad'?CN:CA;
+  cats.forEach(c=>{if(!CATS[c.id])CATS[c.id]={on:false,obs:''};});
+  document.getElementById('cats-body').innerHTML=cats.map(c=>`
+    <div class="crow">
+      <div class="ccheck${CATS[c.id].on?' on':''}" id="cc-${c.id}" onclick="togCat('${c.id}')">${CATS[c.id].on?'✓':''}</div>
+      <span class="cname">${c.lbl}</span>
+      <input class="cobs" type="text" placeholder="Obs…" value="${CATS[c.id].obs||''}" oninput="CATS['${c.id}'].obs=this.value">
+    </div>`).join('');
+}
+function togCat(id){
+  CATS[id].on=!CATS[id].on;
+  const el=document.getElementById('cc-'+id);
+  el.className='ccheck'+(CATS[id].on?' on':'');el.textContent=CATS[id].on?'✓':'';
+}
+
+function renderConf(){
+  const far=v('c-far'),cif=v('c-cif'),com=v('sel-com'),prv=v('c-prv');
+  let promo='';
+  if(TIPO==='navidad'){const tf=TN.find(x=>x.u===TRAMO);promo=`<div class="sbox">
+    <div class="srow"><span class="slbl">Promoción</span><span class="sval">🎄 Navidad Infarma</span></div>
+    <div class="srow"><span class="slbl">Tramo</span><span class="sval" style="font-weight:800">${TRAMO?.toLocaleString('es-ES')} uds</span></div>
+    <div class="srow"><span class="slbl">Precio/ud</span><span class="sval">${tf?.p.toFixed(2).replace('.',',')} €</span></div>
+    <div class="srow"><span class="slbl">Importe</span><span class="sval hi">${(TRAMO*tf.p).toFixed(2).replace('.',',')} €</span></div>
+    ${tf.b>0?`<div class="srow"><span class="slbl">Uds sin cargo</span><span class="sval bon">+${tf.b}</span></div>`:''}
+    <div class="srow"><span class="slbl">Pago</span><span class="sval">60 días desde el envío</span></div></div>`;}
+  else{const ta=TA[TIER],pvl=parseFloat(v('na-pvl'))||0;promo=`<div class="sbox">
+    <div class="srow"><span class="slbl">Promoción</span><span class="sval">🏪 Nuevas Aperturas · Tarifa ${TIER}</span></div>
+    <div class="srow"><span class="slbl">PVL pedido</span><span class="sval" style="font-weight:800">${pvl.toFixed(2).replace('.',',')} €</span></div>
+    <div class="srow"><span class="slbl">Descuento</span><span class="sval bon">${ta.d*100}%</span></div>
+    <div class="srow"><span class="slbl">PVL neto</span><span class="sval hi">${(pvl*(1-ta.d)).toFixed(2).replace('.',',')} €</span></div>
+    <div class="srow"><span class="slbl">Pago</span><span class="sval">${ta.pago}</span></div></div>`;}
+  const cats=TIPO==='navidad'?CN:CA;
+  const actv=Object.entries(CATS).filter(([k,vv])=>vv.on);
+  document.getElementById('conf-body').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+      <div><div class="sec-ttl">Cliente</div><div style="font-weight:700;font-size:15px">${far}</div>
+        <div style="font-size:12px;color:var(--mid);line-height:2;margin-top:3px">${cif?'CIF: '+cif+'<br>':''}${prv?'📍 '+prv:''}</div>
+      </div>
+      <div><div class="sec-ttl">Comercial</div><div style="font-weight:600">${com}</div><div style="font-size:11px;color:var(--mid);margin-top:2px">Infarma Madrid 2026</div></div>
+    </div>
+    <div class="sec-ttl">Condiciones del pedido</div>${promo}
+    ${actv.length?`<div class="sec-ttl" style="margin-top:14px">Categorías seleccionadas</div>
+    <div style="background:var(--brand-bg);border-radius:8px;padding:10px">
+      ${actv.map(([id,vv])=>{const c=cats.find(x=>x.id===id);return`<div style="font-size:12px;padding:2px 0">✓ <b>${c?.lbl}</b>${vv.obs?' · <span style="color:var(--mid)">'+vv.obs+'</span>':''}</div>`;}).join('')}
+    </div>`:''}`;
+}
+
+// ══════════════════════════════════════════
+// SAVE ORDER
+// ══════════════════════════════════════════
+async function savePed(estado){
+  const far=v('c-far').trim();
+  if(!far){toast('Falta el nombre de la farmacia','err');return;}
+  const btn=document.querySelector('#fs5 .btn-p');if(btn)btn.disabled=true;
+  const id='PED-'+Date.now()+'-'+Math.random().toString(36).substr(2,4).toUpperCase();
+  const ped={
+    id,ts:Date.now(),fecha:new Date().toISOString().slice(0,10),
+    tipo:TIPO,com:v('sel-com'),estado,sync:false,
+    cli:{far,cod:v('c-cod'),cif:v('c-cif'),grp:v('c-grp'),prv:v('c-prv'),cto:v('c-cto'),tel:v('c-tel'),eml:v('c-eml')}
+  };
+  if(TIPO==='navidad'){const tf=TN.find(x=>x.u===TRAMO);ped.nav={tramo:TRAMO,prc:tf.p,bonus:tf.b,udsFact:TRAMO,udsTot:TRAMO+tf.b,imp:TRAMO*tf.p,ent:v('nav-ent'),fenv:v('nav-fenv'),obs:v('nav-obs'),cats:{...CATS}};}
+  else{const ta=TA[TIER],pvl=parseFloat(v('na-pvl'))||0;ped.nue={tier:TIER,pvl,dto:ta.d,net:pvl*(1-ta.d),impDto:pvl*ta.d,min:ta.min,pago:ta.pago,rep:ta.rep,ent:v('na-ent'),fenv:v('na-fenv'),obs:v('na-obs'),cats:{...CATS}};}
+  await dbPut('peds',ped);
+  await dbPut('sq',{id:ped.id,ts:Date.now()});
+  PEDS=await dbAll('peds');
+  updBadge();
+  toast(estado==='confirmado'?'✅ Pedido guardado localmente':'💾 Borrador guardado','ok');
+  resetF();
+  if(btn)btn.disabled=false;
+  setTimeout(()=>{showView('dashboard',document.getElementById('tab-dashboard'));syncAll(true);},800);
+}
+const v=id=>document.getElementById(id)?.value||'';
+
+function resetF(){
+  TIPO=null;TRAMO=null;TIER=null;CATS={};
+  ['sel-com','c-far','c-cod','c-cif','c-grp','c-prv','c-cto','c-tel','c-eml','nav-obs','na-obs','na-pvl'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('pc-nav').classList.remove('sel');
+  document.getElementById('pc-nue').classList.remove('sel');
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('sel'));
+  document.querySelectorAll('.tcard').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('nav-sum').style.display='none';
+  document.getElementById('nav-cnd').style.display='none';
+  document.getElementById('na-pvl-sec').style.display='none';
+  document.getElementById('na-sum').style.display='none';
+  goStep(1);
+}
+
+// ══════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════
+function renderDash(){
+  const srch=(document.getElementById('f-srch')?.value||'').toLowerCase();
+  const fCom=document.getElementById('f-com')?.value||'';
+  const fTip=document.getElementById('f-tip')?.value||'';
+  const fEst=document.getElementById('f-est')?.value||'';
+  let fl=[...PEDS].sort((a,b)=>b.ts-a.ts);
+  if(srch)fl=fl.filter(p=>p.cli.far.toLowerCase().includes(srch)||(p.cli.cif||'').toLowerCase().includes(srch));
+  if(fCom)fl=fl.filter(p=>p.com===fCom);
+  if(fTip)fl=fl.filter(p=>p.tipo===fTip);
+  if(fEst)fl=fl.filter(p=>p.estado===fEst);
+  const conf=PEDS.filter(p=>p.estado==='confirmado');
+  let vol=0;conf.forEach(p=>{if(p.tipo==='navidad'&&p.nav)vol+=p.nav.imp||0;if(p.tipo==='nuevas'&&p.nue)vol+=p.nue.net||0;});
+  document.getElementById('st-tot').textContent=PEDS.length;
+  document.getElementById('st-nav').textContent=PEDS.filter(p=>p.tipo==='navidad').length;
+  document.getElementById('st-nue').textContent=PEDS.filter(p=>p.tipo==='nuevas').length;
+  document.getElementById('st-vol').textContent=vol.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,'.')+' €';
+  const ol=document.getElementById('olist');
+  if(!fl.length){ol.innerHTML='<div class="empty"><div class="empty-ico">📋</div><div class="empty-ttl">Sin resultados</div><div class="empty-sub">Ajusta los filtros</div></div>';return;}
+  ol.innerHTML=fl.map(p=>{
+    const isN=p.tipo==='navidad';
+    const det=isN?`${p.nav?.tramo?.toLocaleString('es-ES')} uds · ${p.nav?.imp?.toFixed(2).replace('.',',')} €`:`Tarifa ${p.nue?.tier} · PVL neto ${p.nue?.net?.toFixed(2).replace('.',',')} €`;
+    return`<div class="oitem">
+      <div><div class="ofarm">${p.cli.far}</div>
+        <div class="ometa">${p.fecha} · ${det} · <b>${p.com}</b>${!p.sync?' · <span style="color:var(--accent)">⏳ pendiente sync</span>':''}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+        <span class="badge ${isN?'b-nav':'b-nue'}">${isN?'🎄 Navidad':'🏪 N.Apert.'}</span>
+        <span class="badge ${p.estado==='confirmado'?'b-con':'b-bor'}">${p.estado==='confirmado'?'✓ Confirmado':'📝 Borrador'}</span>
+      </div>
+      <div class="oacts">
+        <button class="btn btn-s btn-sm" onclick="openP('${p.id}')">Ver</button>
+        <button class="btn btn-g btn-sm" onclick="emailP('${p.id}')" title="Email">✉️</button>
+        <button class="btn btn-g btn-sm" onclick="printP('${p.id}')" title="Imprimir">🖨️</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// MODAL
+// ══════════════════════════════════════════
+async function openP(id){
+  const p=PEDS.find(x=>x.id===id);if(!p)return;
+  const isN=p.tipo==='navidad';const cats=isN?CN:CA;const cd=isN?p.nav?.cats:p.nue?.cats;
+  const actv=cd?Object.entries(cd).filter(([k,vv])=>vv.on):[];
+  let det='';
+  if(isN&&p.nav){const n=p.nav;det=`<div class="sbox">
+    <div class="srow"><span class="slbl">Tramo</span><span class="sval" style="font-weight:800">${n.tramo?.toLocaleString('es-ES')} uds</span></div>
+    <div class="srow"><span class="slbl">Precio/ud</span><span class="sval">${n.prc?.toFixed(2).replace('.',',')} €</span></div>
+    <div class="srow"><span class="slbl">Importe</span><span class="sval hi">${n.imp?.toFixed(2).replace('.',',')} €</span></div>
+    ${n.bonus>0?`<div class="srow"><span class="slbl">Uds sin cargo</span><span class="sval bon">+${n.bonus}</span></div>`:''}
+    <div class="srow"><span class="slbl">Entrega</span><span class="sval">${n.ent==='tras_feria'?'Tras feria':'Programada'}</span></div>
+    ${n.fenv?`<div class="srow"><span class="slbl">Fecha envío</span><span class="sval">${n.fenv}</span></div>`:''}
+    <div class="srow"><span class="slbl">Forma de pago</span><span class="sval">60 días desde el envío</span></div></div>`;}
+  else if(p.nue){const n=p.nue;det=`<div class="sbox">
+    <div class="srow"><span class="slbl">Tarifa</span><span class="sval" style="font-weight:800">${n.tier}</span></div>
+    <div class="srow"><span class="slbl">PVL pedido</span><span class="sval">${n.pvl?.toFixed(2).replace('.',',')} €</span></div>
+    <div class="srow"><span class="slbl">Descuento</span><span class="sval bon">${(n.dto*100)}%</span></div>
+    <div class="srow"><span class="slbl">PVL neto</span><span class="sval hi">${n.net?.toFixed(2).replace('.',',')} €</span></div>
+    <div class="srow"><span class="slbl">Pago</span><span class="sval">${n.pago}</span></div>
+    <div class="srow"><span class="slbl">Reposición</span><span class="sval bon">${n.rep}</span></div>
+    ${n.fenv?`<div class="srow"><span class="slbl">Fecha envío</span><span class="sval">${n.fenv}</span></div>`:''}
+    </div>`;}
+  const obs=isN?p.nav?.obs:p.nue?.obs;
+  document.getElementById('m-ttl').textContent=p.cli.far;
+  document.getElementById('m-body').innerHTML=`
+    <div class="ph plogo">Betrés ON · Natu Laboratories · Infarma Madrid 2026</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+      <div><div class="sec-ttl">Cliente</div>
+        <div style="font-weight:700;font-size:14px">${p.cli.far}</div>
+        <div style="font-size:12px;color:var(--mid);line-height:2;margin-top:3px">
+          ${p.cli.cif?'<b>CIF:</b> '+p.cli.cif+'<br>':''}${p.cli.cod?'<b>Cód:</b> '+p.cli.cod+'<br>':''}${p.cli.grp?'<b>Grupo:</b> '+p.cli.grp+'<br>':''}${p.cli.cto?'<b>Contacto:</b> '+p.cli.cto+'<br>':''}${p.cli.tel?'📞 '+p.cli.tel+'<br>':''}${p.cli.eml?'✉️ '+p.cli.eml+'<br>':''}${p.cli.prv?'📍 '+p.cli.prv:''}
+        </div>
+      </div>
+      <div><div class="sec-ttl">Pedido</div>
+        <div style="font-size:12px;line-height:2">
+          <div><b>ID:</b> <span style="font-family:monospace;font-size:10px">${p.id}</span></div>
+          <div><b>Fecha:</b> ${p.fecha}</div><div><b>Comercial:</b> ${p.com}</div>
+          <div style="margin-top:3px"><span class="badge ${isN?'b-nav':'b-nue'}">${isN?'🎄 Navidad':'🏪 Nuevas Aperturas'}</span> <span class="badge ${p.estado==='confirmado'?'b-con':'b-bor'}">${p.estado==='confirmado'?'✓ Confirmado':'📝 Borrador'}</span> ${p.sync?'<span class="badge b-sync">☁️ Sync</span>':'<span class="badge b-bor">⏳ Pendiente</span>'}</div>
+        </div>
+      </div>
+    </div>
+    <div class="sec-ttl">Condiciones del pedido</div>${det}
+    ${actv.length?`<div class="sec-ttl" style="margin-top:14px">Categorías / Implantación</div>
+    <div style="background:var(--brand-bg);border-radius:8px;padding:10px">${actv.map(([id,vv])=>{const c=cats.find(x=>x.id===id);return`<div style="font-size:12px;padding:2px 0">✓ <b>${c?.lbl}</b>${vv.obs?' · '+vv.obs:''}</div>`;}).join('')}</div>`:''}
+    ${obs?`<div style="margin-top:12px"><div class="sec-ttl">Observaciones</div><div style="background:#F9F7F5;border-radius:7px;padding:9px;font-size:12px">${obs}</div></div>`:''}
+    <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font-size:10px;color:var(--light);text-align:center">Betrés ON · Natu Laboratories · Infarma Madrid 2026 · ${p.id}</div>`;
+  document.getElementById('m-foot').innerHTML=`
+    <button class="btn btn-g btn-sm" onclick="closeM()">Cerrar</button>
+    ${p.estado==='borrador'?`<button class="btn btn-s btn-sm" onclick="confP('${p.id}')">✅ Confirmar</button>`:''}
+    <button class="btn btn-g btn-sm" onclick="emailP('${p.id}')">✉️ Email</button>
+    <button class="btn btn-s btn-sm" onclick="printM()">🖨️ Imprimir</button>
+    <button class="btn btn-d btn-sm" onclick="delP('${p.id}')">🗑️ Eliminar</button>`;
+  document.getElementById('modal').style.display='flex';
+}
+function closeM(){document.getElementById('modal').style.display='none';}
+function printM(){window.print();}
+async function printP(id){await openP(id);setTimeout(()=>window.print(),300);}
+
+async function emailP(id){
+  const p=PEDS.find(x=>x.id===id);if(!p)return;
+  const isN=p.tipo==='navidad';
+  const sub=encodeURIComponent(`Pedido Betrés ON · ${p.cli.far} · Infarma 2026`);
+  let body=`PEDIDO BETRÉS ON – INFARMA MADRID 2026\n${'─'.repeat(40)}\nFARMACIA: ${p.cli.far}\n`;
+  if(p.cli.cif)body+=`CIF: ${p.cli.cif}\n`;
+  if(p.cli.tel)body+=`Tel: ${p.cli.tel}\n`;
+  body+=`\nCOMERCIAL: ${p.com}\nFECHA: ${p.fecha}\nID: ${p.id}\n\n`;
+  if(isN&&p.nav)body+=`PROMOCIÓN NAVIDAD\nTramo: ${p.nav.tramo} uds\nPrecio: ${p.nav.prc?.toFixed(2)} €/ud\nImporte: ${p.nav.imp?.toFixed(2)} €\n${p.nav.bonus>0?`Uds sin cargo: +${p.nav.bonus}\n`:''}Pago: 60 días\n${p.nav.obs?'Obs: '+p.nav.obs+'\n':''}`;
+  else if(p.nue)body+=`NUEVAS APERTURAS – TARIFA ${p.nue.tier}\nPVL pedido: ${p.nue.pvl?.toFixed(2)} €\nDescuento: ${(p.nue.dto*100)}%\nPVL neto: ${p.nue.net?.toFixed(2)} €\nPago: ${p.nue.pago}\n${p.nue.obs?'Obs: '+p.nue.obs+'\n':''}`;
+  const cfg=await getCfg();
+  const dest=p.cli.eml||cfg.notifEml||'';
+  window.location.href=`mailto:${dest}?subject=${sub}&body=${encodeURIComponent(body)}`;
+}
+async function confP(id){
+  const p=PEDS.find(x=>x.id===id);if(!p)return;
+  p.estado='confirmado';p.ts=Date.now();
+  await dbPut('peds',p);await dbPut('sq',{id:p.id,ts:Date.now()});
+  PEDS=await dbAll('peds');closeM();renderDash();
+  toast('✅ Pedido confirmado','ok');
+  syncAll(true);
+}
+async function delP(id){
+  if(!confirm('¿Eliminar este pedido? Esta acción no se puede deshacer.'))return;
+  await dbDel('peds',id);PEDS=await dbAll('peds');closeM();renderDash();updBadge();toast('Pedido eliminado','err');
+}
+
+// ══════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════
+async function getCfg(){
+  const [wPost,wGet,nem,coms]=[await dbGet('cfg','whPost'),await dbGet('cfg','whGet'),await dbGet('cfg','notifEml'),await dbGet('cfg','coms')];
+  return{whPost:wPost?.v||'',whGet:wGet?.v||'',notifEml:nem?.v||'',coms:coms?.v||[]};
+}
+async function saveComs(){
+  const raw=document.getElementById('coms-inp').value;
+  const list=raw.split('\n').map(s=>s.trim()).filter(Boolean);
+  await dbPut('cfg',{k:'coms',v:list});populateComs(list);toast('Equipo guardado','ok');
+}
+function populateComs(list){
+  const opts=list.map(c=>`<option value="${c}">${c}</option>`).join('');
+  document.getElementById('sel-com').innerHTML='<option value="">— Selecciona —</option>'+opts;
+  document.getElementById('f-com').innerHTML='<option value="">Todos los comerciales</option>'+opts;
+}
+async function saveCfg(){
+  const wPost=document.getElementById('wh-post').value.trim();
+  const wGet=document.getElementById('wh-get').value.trim();
+  const nem=document.getElementById('notif-eml').value.trim();
+  await dbPut('cfg',{k:'whPost',v:wPost});
+  await dbPut('cfg',{k:'whGet',v:wGet});
+  await dbPut('cfg',{k:'notifEml',v:nem});
+  toast('Configuración guardada','ok');
+}
+
+// ══════════════════════════════════════════
+// EXPORT
+// ══════════════════════════════════════════
+function exportCSV(){
+  if(!PEDS.length){toast('No hay pedidos','err');return;}
+  const H=['ID','Fecha','Tipo','Comercial','Estado','Farmacia','CIF','Código','Grupo','Contacto','Teléfono','Email','Provincia','Tramo/Tarifa','Importe/PVL','PVL Neto','Uds sin cargo','Entrega','Fecha envío','Observaciones','Sync'];
+  const R=PEDS.map(p=>{const isN=p.tipo==='navidad';return[p.id,p.fecha,isN?'Navidad':'Nuevas Aperturas',p.com,p.estado,p.cli.far,p.cli.cif,p.cli.cod,p.cli.grp,p.cli.cto,p.cli.tel,p.cli.eml,p.cli.prv,isN?p.nav?.tramo:p.nue?.tier,isN?p.nav?.imp?.toFixed(2):p.nue?.pvl?.toFixed(2),isN?'':p.nue?.net?.toFixed(2),isN?p.nav?.bonus:'',isN?p.nav?.ent:p.nue?.ent,isN?p.nav?.fenv:p.nue?.fenv,isN?p.nav?.obs:p.nue?.obs,p.sync?'Sí':'No'].map(vv=>'"'+(vv||'').toString().replace(/"/g,'""')+'"');});
+  const csv=[H,...R].map(r=>r.join(';')).join('\n');
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);a.download='pedidos_infarma_'+new Date().toISOString().slice(0,10)+'.csv';a.click();toast('CSV exportado','ok');
+}
+async function clearAll(){
+  if(!confirm('¿Borrar TODOS los datos locales? Esto no afecta a Google Sheets si ya están sincronizados.'))return;
+  for(const p of PEDS)await dbDel('peds',p.id);
+  const q=await dbAll('sq');for(const i of q)await dbDel('sq',i.id);
+  PEDS=[];renderDash();updBadge();updPP();toast('Datos locales borrados','err');
+}
+
+// ══════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════
+function toast(msg,type=''){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className='toast show'+(type?' '+type:'');
+  clearTimeout(el._t);el._t=setTimeout(()=>el.className='toast',3500);
+}
+function updBadge(){document.getElementById('obadge').textContent=PEDS.length;}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+async function init(){
+  await initDB();
+  PEDS=await dbAll('peds');
+  const cfg=await getCfg();
+  document.getElementById('coms-inp').value=cfg.coms.join('\n');
+  if(document.getElementById('wh-post'))document.getElementById('wh-post').value=cfg.whPost;
+  if(document.getElementById('wh-get'))document.getElementById('wh-get').value=cfg.whGet;
+  if(document.getElementById('notif-eml'))document.getElementById('notif-eml').value=cfg.notifEml;
+  populateComs(cfg.coms.length?cfg.coms:['Comercial 1']);
+  const ls=await dbGet('cfg','lastSync');
+  if(ls?.v){lastSync=new Date(ls.v);updSyncUI();}
+  updBadge();updStatus();updPP();
+  if(navigator.onLine)setTimeout(()=>syncAll(true),1500);
+}
+init();
+</script>
+
+<script>
+// ── SERVICE WORKER REGISTRATION ──────────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('/betres-sw.js', { scope: '/' });
+      console.log('SW registered:', reg.scope);
+    } catch(e) {
+      // Si no está en raíz, intenta ruta relativa
+      try {
+        const reg = await navigator.serviceWorker.register('betres-sw.js');
+        console.log('SW registered (relative):', reg.scope);
+      } catch(e2) {
+        console.warn('SW not available:', e2.message);
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>
