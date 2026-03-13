@@ -1035,15 +1035,43 @@ function updBadge(){document.getElementById('obadge').textContent=PEDS.length;}
 // ══════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════
+// ── DEFAULTS (hardcoded) ─────────────────────────────
+const DEFAULT_WH_POST = 'https://natulab.app.n8n.cloud/webhook/betres-pedido';
+const DEFAULT_WH_GET  = 'https://natulab.app.n8n.cloud/webhook/betres-pedidos';
+const DEFAULT_EMAIL   = 'digitalmanager@natuaromatic.com';
+const DEFAULT_COMS    = [
+  'FAR001. GREGORIO',
+  'FAR002. DAVID ARRIFE',
+  'FAR003. FRANCISCO HUERTAS',
+  'FAR004. GEORGET MOUCHATI',
+  'FAR005. JOSE OJEDA',
+  'FAR006. JUAN VILLAJOS',
+  'FAR007. LOURDES NAVARRO',
+  'FAR008. JAVIER MOLEJON',
+  'FAR009. YOLANDA VIVAS',
+  'FAR012. NATUAROMATIC FARMACIA',
+  'FAR013. PEDRO ORTEGA',
+  'FAR019. RAMON BELENGUER'
+];
+
 async function init(){
   await initDB();
   PEDS=await dbAll('peds');
   const cfg=await getCfg();
+
+  // Si no hay config guardada, aplicar defaults automáticamente
+  if(!cfg.whPost){ await dbPut('cfg',{k:'whPost',v:DEFAULT_WH_POST}); cfg.whPost=DEFAULT_WH_POST; }
+  if(!cfg.whGet){  await dbPut('cfg',{k:'whGet', v:DEFAULT_WH_GET});  cfg.whGet=DEFAULT_WH_GET;  }
+  if(!cfg.notifEml){ await dbPut('cfg',{k:'notifEml',v:DEFAULT_EMAIL}); cfg.notifEml=DEFAULT_EMAIL; }
+  if(!cfg.coms.length){ await dbPut('cfg',{k:'coms',v:DEFAULT_COMS}); cfg.coms=DEFAULT_COMS; }
+
+  // Rellenar campos de config
   document.getElementById('coms-inp').value=cfg.coms.join('\n');
   if(document.getElementById('wh-post'))document.getElementById('wh-post').value=cfg.whPost;
   if(document.getElementById('wh-get'))document.getElementById('wh-get').value=cfg.whGet;
   if(document.getElementById('notif-eml'))document.getElementById('notif-eml').value=cfg.notifEml;
-  populateComs(cfg.coms.length?cfg.coms:['Comercial 1']);
+
+  populateComs(cfg.coms);
   const ls=await dbGet('cfg','lastSync');
   if(ls?.v){lastSync=new Date(ls.v);updSyncUI();}
   updBadge();updStatus();updPP();
