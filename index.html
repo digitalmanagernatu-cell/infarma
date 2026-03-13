@@ -4,242 +4,259 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Betrés ON · Pedidos Infarma 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --brand:#7B3F1A;--brand-l:#C4681F;--brand-bg:#FDF5EE;
-  --accent:#C4943A;--dark:#1C1917;--mid:#57534E;
-  --light:#A8A29E;--border:#E7E5E4;
-  --green:#16A34A;--red:#DC2626;--blue:#1D4ED8;
-  --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.05);
-  --r:10px;
-  --font-d:'Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;
-  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --blue:#1A56E8;--blue-d:#1240C0;--blue-bg:#EFF4FF;--blue-border:#C7D9FF;
+  --dark:#0F172A;--mid:#475569;--light:#94A3B8;--border:#E2E8F0;--bg:#F8FAFC;
+  --green:#16A34A;--green-bg:#F0FDF4;--red:#DC2626;--red-bg:#FEF2F2;
+  --orange:#EA580C;--orange-bg:#FFF7ED;
+  --shadow:0 1px 2px rgba(0,0,0,.05),0 2px 8px rgba(0,0,0,.04);
+  --shadow-md:0 4px 16px rgba(0,0,0,.08);
+  --r:8px;
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 }
-body{font-family:var(--font);background:#F0EBE3;color:var(--dark);min-height:100vh;font-size:14px}
+body{font-family:var(--font);background:var(--bg);color:var(--dark);min-height:100vh;font-size:14px;-webkit-font-smoothing:antialiased}
 
 /* HEADER */
-.hdr{background:var(--dark);color:#fff;padding:0 16px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.hdr-logo{font-family:var(--font-d);font-size:16px;letter-spacing:.3px}
-.hdr-logo span{color:var(--accent)}
-.hdr-r{display:flex;align-items:center;gap:7px}
-.sbadge{display:flex;align-items:center;gap:4px;font-size:11px;padding:3px 8px;border-radius:20px;font-weight:600;cursor:pointer}
-.s-on{background:rgba(22,163,74,.2);color:#4ADE80}
-.s-off{background:rgba(220,38,38,.2);color:#FCA5A5}
-.s-sync{background:rgba(196,148,58,.3);color:#FCD34D}
-.sdot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.hdr{background:#fff;border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.hdr-logo{font-size:15px;font-weight:700;color:var(--dark);display:flex;align-items:center;gap:6px}
+.hdr-logo-accent{color:var(--blue)}
+.hdr-tag{font-size:11px;font-weight:500;color:var(--light);background:var(--bg);border:1px solid var(--border);padding:2px 8px;border-radius:20px}
+.hdr-r{display:flex;align-items:center;gap:8px}
+.sbadge{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;cursor:pointer;border:1px solid transparent}
+.s-on{background:var(--green-bg);color:var(--green);border-color:#BBF7D0}
+.s-off{background:var(--red-bg);color:var(--red);border-color:#FCA5A5}
+.s-sync{background:#FFF7ED;color:var(--orange);border-color:#FED7AA}
+.sdot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
 .pulse{animation:pulse 1.2s ease infinite}
 .spin{animation:spin .8s linear infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
 @keyframes spin{to{transform:rotate(360deg)}}
-.ppill{background:rgba(196,148,58,.2);color:#B45309;font-size:11px;padding:3px 9px;border-radius:10px;font-weight:600}
+.ppill{background:#FFF7ED;color:var(--orange);font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;border:1px solid #FED7AA}
 
 /* NAV */
-.nav{background:#fff;border-bottom:1px solid var(--border);display:flex;padding:0 16px;overflow-x:auto;scrollbar-width:none}
+.nav{background:#fff;border-bottom:1px solid var(--border);display:flex;padding:0 24px;overflow-x:auto;scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
-.ntab{padding:11px 16px;font-size:13px;font-weight:500;color:var(--light);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s}
-.ntab.active{color:var(--brand);border-bottom-color:var(--brand)}
+.ntab{padding:13px 16px;font-size:13px;font-weight:500;color:var(--light);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .15s;display:flex;align-items:center;gap:5px}
+.ntab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}
 .ntab:hover:not(.active){color:var(--mid)}
-.nbadge{background:var(--brand);color:#fff;font-size:10px;min-width:16px;height:16px;border-radius:8px;padding:0 4px;margin-left:4px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+.nbadge{background:var(--blue);color:#fff;font-size:10px;min-width:17px;height:17px;border-radius:10px;padding:0 4px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
 
 /* LAYOUT */
-.wrap{max-width:780px;margin:0 auto;padding:18px 12px}
+.wrap{max-width:800px;margin:0 auto;padding:20px 16px}
 .view{display:none}.view.active{display:block}
 
 /* SYNC BAR */
-.syncbar{background:#fff;border-radius:var(--r);padding:10px 14px;box-shadow:var(--shadow);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.syncbar{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:10px 16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .syncbar-l{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mid)}
 .syncbar-r{display:flex;gap:6px}
-.sync-indicator{width:8px;height:8px;border-radius:50%}
-.si-ok{background:var(--green)}.si-pend{background:var(--accent)}.si-err{background:var(--red)}
+.si{width:8px;height:8px;border-radius:50%}
+.si-ok{background:var(--green)}.si-pend{background:var(--orange)}.si-err{background:var(--red)}
 
 /* CARDS */
-.card{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden}
-.card-hdr{padding:13px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.card-hdr-l{display:flex;align-items:center;gap:8px}
-.card-ico{width:28px;height:28px;border-radius:6px;background:var(--brand-bg);display:flex;align-items:center;justify-content:center;font-size:14px}
-.card-ttl{font-size:11px;font-weight:700;color:var(--dark);text-transform:uppercase;letter-spacing:.5px}
-.card-body{padding:16px}
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--r);margin-bottom:14px;overflow:hidden}
+.card-hdr{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-hdr-l{display:flex;align-items:center;gap:10px}
+.card-ico{width:30px;height:30px;border-radius:6px;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;font-size:14px}
+.card-ttl{font-size:13px;font-weight:600;color:var(--dark)}
+.card-sub{font-size:11px;color:var(--light);margin-top:1px}
+.card-body{padding:18px}
 
 /* STEPS */
-.steps{background:#fff;border-radius:var(--r);padding:12px 16px;box-shadow:var(--shadow);margin-bottom:14px;display:flex;align-items:center}
-.step{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative}
-.step:not(:last-child)::after{content:'';position:absolute;top:12px;left:50%;width:100%;height:2px;background:var(--border);z-index:0}
-.step.done:not(:last-child)::after,.step.active:not(:last-child)::after{background:var(--brand)}
-.sc{width:24px;height:24px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--light);z-index:1;position:relative}
-.step.done .sc{background:var(--brand);color:#fff}
-.step.active .sc{background:var(--brand);color:#fff;box-shadow:0 0 0 4px rgba(123,63,26,.15)}
-.sl{font-size:9px;text-align:center;color:var(--light);white-space:nowrap}
-.step.active .sl{color:var(--brand);font-weight:700}
+.steps{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center}
+.step{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;position:relative}
+.step:not(:last-child)::after{content:'';position:absolute;top:11px;left:50%;width:100%;height:1.5px;background:var(--border);z-index:0}
+.step.done:not(:last-child)::after,.step.active:not(:last-child)::after{background:var(--blue)}
+.sc{width:22px;height:22px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--light);z-index:1;position:relative}
+.step.done .sc{background:var(--blue);color:#fff}
+.step.active .sc{background:var(--blue);color:#fff;box-shadow:0 0 0 3px var(--blue-bg)}
+.sl{font-size:9px;text-align:center;color:var(--light);white-space:nowrap;font-weight:500}
+.step.active .sl{color:var(--blue);font-weight:600}
 .step.done .sl{color:var(--mid)}
 
 /* FORM */
-.fg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.fg3{grid-template-columns:1fr 1fr 1fr}
-.fgrp{display:flex;flex-direction:column;gap:3px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fgrp{display:flex;flex-direction:column;gap:4px}
 .fgrp.full{grid-column:1/-1}
-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--mid)}
+label{font-size:11px;font-weight:600;color:var(--mid);letter-spacing:.2px}
 input[type=text],input[type=email],input[type=number],input[type=date],select,textarea{
-  border:1.5px solid var(--border);border-radius:7px;padding:8px 11px;font-size:13px;
-  font-family:var(--font);color:var(--dark);background:#fff;transition:border-color .2s;width:100%;-webkit-appearance:none}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(123,63,26,.08)}
-input[readonly]{background:#F9F7F5;color:var(--mid)}
+  border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:13px;
+  font-family:var(--font);color:var(--dark);background:#fff;transition:border-color .15s,box-shadow .15s;width:100%;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-bg)}
+input[readonly]{background:var(--bg);color:var(--mid)}
 textarea{resize:vertical;min-height:54px}
-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;padding-right:30px}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2394A3B8' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
 
 /* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:5px;padding:9px 15px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;font-family:var(--font)}
-.btn:disabled{opacity:.5;cursor:default}
-.btn-p{background:var(--brand);color:#fff}.btn-p:hover:not(:disabled){background:#5C2F14}
-.btn-s{background:var(--brand-bg);color:var(--brand);border:1.5px solid #E8D0BC}.btn-s:hover:not(:disabled){background:#EDD8C8}
-.btn-g{background:transparent;color:var(--mid);border:1.5px solid var(--border)}.btn-g:hover:not(:disabled){background:#F5F0EB}
-.btn-b{background:#EFF6FF;color:var(--blue);border:1.5px solid #BFDBFE}.btn-b:hover:not(:disabled){background:#DBEAFE}
-.btn-d{background:#FEF2F2;color:var(--red);border:1.5px solid #FCA5A5}
-.btn-sm{padding:5px 10px;font-size:12px}
-.btn-row{display:flex;gap:7px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;font-family:var(--font);letter-spacing:-.1px}
+.btn:disabled{opacity:.45;cursor:default}
+.btn-p{background:var(--blue);color:#fff}.btn-p:hover:not(:disabled){background:var(--blue-d)}
+.btn-s{background:#fff;color:var(--blue);border:1px solid var(--blue-border)}.btn-s:hover:not(:disabled){background:var(--blue-bg)}
+.btn-g{background:#fff;color:var(--mid);border:1px solid var(--border)}.btn-g:hover:not(:disabled){background:var(--bg)}
+.btn-d{background:var(--red-bg);color:var(--red);border:1px solid #FCA5A5}
+.btn-sm{padding:5px 11px;font-size:12px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.jb{justify-content:space-between}
 
 /* PROMO CARDS */
-.pcards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.pcard{border:2px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .2s;text-align:center}
-.pcard:hover{border-color:var(--brand-l);background:var(--brand-bg)}
-.pcard.sel{border-color:var(--brand);background:var(--brand-bg);box-shadow:0 0 0 3px rgba(123,63,26,.1)}
-.pcard-ico{font-size:28px;margin-bottom:6px}
-.pcard-ttl{font-weight:700;font-size:13px}
-.pcard-sub{font-size:11px;color:var(--mid);margin-top:2px}
+.pcards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pcard{border:1.5px solid var(--border);border-radius:var(--r);padding:16px;cursor:pointer;transition:all .15s;background:#fff}
+.pcard:hover{border-color:var(--blue);background:var(--blue-bg)}
+.pcard.sel{border-color:var(--blue);background:var(--blue-bg);box-shadow:0 0 0 3px rgba(26,86,232,.08)}
+.pcard-ico{font-size:26px;margin-bottom:8px}
+.pcard-ttl{font-weight:700;font-size:13px;color:var(--dark)}
+.pcard-sub{font-size:11px;color:var(--light);margin-top:3px}
 
 /* TRAMO */
-.tramo-grid{display:flex;gap:7px;flex-wrap:wrap}
-.tbtn{flex:1;min-width:75px;padding:10px 6px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;text-align:center;transition:all .2s}
-.tbtn:hover{border-color:var(--brand-l);background:var(--brand-bg)}
-.tbtn.sel{border-color:var(--brand);background:var(--brand-bg)}
+.tramo-grid{display:flex;gap:8px;flex-wrap:wrap}
+.tbtn{flex:1;min-width:72px;padding:10px 8px;border:1.5px solid var(--border);border-radius:var(--r);background:#fff;cursor:pointer;text-align:center;transition:all .15s}
+.tbtn:hover{border-color:var(--blue);background:var(--blue-bg)}
+.tbtn.sel{border-color:var(--blue);background:var(--blue-bg)}
 .tuds{font-size:16px;font-weight:800;color:var(--dark)}
-.tprice{font-size:11px;color:var(--mid)}
-.tbonus{font-size:10px;color:var(--green);font-weight:700;margin-top:2px}
+.tprice{font-size:11px;color:var(--mid);margin-top:2px}
+.tbonus{font-size:10px;color:var(--green);font-weight:600;margin-top:2px}
 
 /* TIER */
-.tier-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-.tcard{border:2px solid var(--border);border-radius:var(--r);padding:12px;cursor:pointer;transition:all .2s}
-.tcard:hover{border-color:var(--brand-l);background:var(--brand-bg)}
-.tcard.sel{border-color:var(--brand);background:var(--brand-bg)}
-.tl{font-size:22px;font-weight:800;font-family:var(--font-d);color:var(--brand)}
-.tmin{font-size:11px;color:var(--mid)}
-.tdto{font-size:13px;font-weight:700;color:var(--green);margin:3px 0}
+.tier-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.tcard{border:1.5px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .15s;background:#fff}
+.tcard:hover{border-color:var(--blue);background:var(--blue-bg)}
+.tcard.sel{border-color:var(--blue);background:var(--blue-bg)}
+.tl{font-size:24px;font-weight:800;color:var(--blue)}
+.tmin{font-size:11px;color:var(--mid);margin-top:2px}
+.tdto{font-size:13px;font-weight:700;color:var(--green);margin:4px 0}
 .tpago{font-size:10px;color:var(--light)}
 
-/* SUMMARY */
-.sbox{background:var(--brand-bg);border:1.5px solid #E8D0BC;border-radius:var(--r);padding:13px;margin-top:10px}
-.srow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(123,63,26,.08)}
+/* SUMMARY BOX */
+.sbox{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-top:12px}
+.srow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)}
 .srow:last-child{border-bottom:none}
 .slbl{font-size:12px;color:var(--mid)}
-.sval{font-size:13px;font-weight:600}
-.sval.hi{color:var(--brand);font-size:15px}
+.sval{font-size:13px;font-weight:600;color:var(--dark)}
+.sval.hi{color:var(--blue);font-size:15px;font-weight:700}
 .sval.bon{color:var(--green)}
 
 /* CONDITIONS */
-.cbox{background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:var(--r);padding:12px;margin-top:10px}
+.cbox{background:var(--green-bg);border:1px solid #BBF7D0;border-radius:var(--r);padding:13px;margin-top:12px}
 .cbox-ttl{font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.cbox-body{font-size:12px;color:#166534;line-height:1.9}
+.cbox-body{font-size:12px;color:#15803D;line-height:2}
 
-/* CATEGORIES */
-.crow{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)}
+/* CATEGORIES TABLE */
+.ctable{width:100%;border-collapse:collapse}
+.ctable-hdr{display:grid;grid-template-columns:28px 1fr 2fr;gap:12px;padding:8px 12px;background:var(--bg);border-bottom:2px solid var(--dark);font-size:11px;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.4px}
+.crow{display:grid;grid-template-columns:28px 1fr 2fr;gap:12px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border);transition:background .1s}
 .crow:last-child{border-bottom:none}
-.ccheck{width:17px;height:17px;border:2px solid var(--border);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;font-size:11px}
-.ccheck.on{background:var(--brand);border-color:var(--brand);color:#fff}
-.cname{flex:1;font-size:13px;font-weight:500}
-.cobs{flex:2;border:1.5px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px;font-family:var(--font);color:var(--dark);background:#fff}
-.cobs:focus{outline:none;border-color:var(--brand)}
+.crow:hover{background:var(--blue-bg)}
+.ccheck{width:17px;height:17px;border:1.5px solid var(--border);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .1s;font-size:10px;font-weight:700}
+.ccheck.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.cname{font-size:13px;font-weight:500;color:var(--dark)}
+.cobs{border:1px solid var(--border);border-radius:5px;padding:5px 9px;font-size:12px;font-family:var(--font);color:var(--dark);background:#fff;width:100%}
+.cobs:focus{outline:none;border-color:var(--blue)}
 
 /* STATS */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
-.stat{background:#fff;border-radius:var(--r);padding:14px;box-shadow:var(--shadow);text-align:center}
-.stn{font-size:24px;font-weight:800;font-family:var(--font-d);color:var(--brand)}
-.stl{font-size:10px;color:var(--light);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.stat{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:16px;text-align:center}
+.stn{font-size:26px;font-weight:800;color:var(--blue)}
+.stl{font-size:10px;color:var(--light);text-transform:uppercase;letter-spacing:.5px;margin-top:3px;font-weight:500}
 
 /* FILTERS */
-.fbar{background:#fff;border-radius:var(--r);padding:10px 12px;box-shadow:var(--shadow);margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.fbar select,.fbar input{flex:1;min-width:100px;padding:6px 9px;font-size:13px}
+.fbar{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;margin-bottom:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.fbar select,.fbar input{flex:1;min-width:100px;font-size:13px;padding:6px 10px}
 
-/* LIST */
-.olist{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
-.oitem{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border);transition:background .15s}
+/* ORDERS TABLE */
+.olist{background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.olist-hdr{display:grid;grid-template-columns:1fr 120px 90px 110px;gap:12px;padding:9px 16px;background:var(--bg);border-bottom:2px solid var(--dark);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--mid)}
+.oitem{display:grid;grid-template-columns:1fr 120px 90px 110px;gap:12px;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border);transition:background .1s}
 .oitem:last-child{border-bottom:none}
-.oitem:hover{background:#FDF9F5}
-.ofarm{font-weight:600;font-size:13px}
+.oitem:hover{background:var(--bg)}
+.ofarm{font-weight:600;font-size:13px;color:var(--dark)}
 .ometa{font-size:11px;color:var(--mid);margin-top:2px}
-.oacts{display:flex;gap:4px}
+.oacts{display:flex;gap:4px;justify-content:flex-end}
+.oamt{font-size:13px;font-weight:700;color:var(--dark);text-align:right}
+.oamtsub{font-size:10px;color:var(--light);margin-top:1px;text-align:right}
 
 /* BADGES */
-.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap}
 .b-nav{background:#FFF7ED;color:#C2410C;border:1px solid #FED7AA}
-.b-nue{background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE}
-.b-con{background:#F0FDF4;color:#15803D;border:1px solid #BBF7D0}
+.b-nue{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border)}
+.b-con{background:var(--green-bg);color:var(--green);border:1px solid #BBF7D0}
 .b-bor{background:#FFFBEB;color:#B45309;border:1px solid #FDE68A}
 .b-sync{background:#F5F3FF;color:#7C3AED;border:1px solid #DDD6FE}
 
 /* MODAL */
-.mover{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:12px}
-.modal{background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.2);width:100%;max-width:660px;max-height:90vh;overflow-y:auto}
-.mhdr{padding:16px 20px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1}
+.mover{position:fixed;inset:0;background:rgba(15,23,42,.4);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)}
+.modal{background:#fff;border-radius:12px;border:1px solid var(--border);box-shadow:var(--shadow-md);width:100%;max-width:660px;max-height:90vh;overflow-y:auto}
+.mhdr{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1}
 .mttl{font-size:15px;font-weight:700}
-.mcls{width:28px;height:28px;border-radius:6px;border:none;background:var(--border);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--mid)}
+.mcls{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--mid);transition:background .1s}
+.mcls:hover{background:var(--bg)}
 .mbody{padding:20px}
-.mfoot{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+.mfoot{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
 
 /* ALERTS */
-.alert{padding:10px 13px;border-radius:8px;font-size:12px;margin-bottom:12px;line-height:1.6}
-.a-info{background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE}
-.a-warn{background:#FFFBEB;color:#92400E;border:1px solid #FDE68A}
-.a-ok{background:#F0FDF4;color:#166534;border:1px solid #BBF7D0}
-.a-err{background:#FEF2F2;color:#991B1B;border:1px solid #FCA5A5}
+.alert{padding:11px 14px;border-radius:var(--r);font-size:12px;margin-bottom:14px;line-height:1.6;border:1px solid}
+.a-info{background:var(--blue-bg);color:#1E40AF;border-color:var(--blue-border)}
+.a-warn{background:#FFFBEB;color:#92400E;border-color:#FDE68A}
+.a-ok{background:var(--green-bg);color:#166534;border-color:#BBF7D0}
+.a-err{background:var(--red-bg);color:#991B1B;border-color:#FCA5A5}
 
 /* TOAST */
-.toast{position:fixed;bottom:20px;right:20px;background:var(--dark);color:#fff;padding:10px 16px;border-radius:var(--r);font-size:13px;font-weight:500;box-shadow:0 8px 30px rgba(0,0,0,.2);z-index:300;transform:translateY(80px);opacity:0;transition:all .3s;max-width:320px}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--dark);color:#fff;padding:10px 16px;border-radius:var(--r);font-size:13px;font-weight:500;box-shadow:var(--shadow-md);z-index:300;transform:translateY(80px);opacity:0;transition:all .25s;max-width:320px;border:1px solid rgba(255,255,255,.1)}
 .toast.show{transform:translateY(0);opacity:1}
-.toast.ok{background:#166534}.toast.err{background:#991B1B}.toast.warn{background:#92400E}
+.toast.ok{background:#166534;border-color:#15803D}
+.toast.err{background:#991B1B;border-color:#B91C1C}
+.toast.warn{background:#92400E;border-color:#B45309}
 
 /* SYNC LOG */
-.slog{background:#F9F7F5;border-radius:8px;padding:12px;font-size:11px;color:var(--mid);max-height:160px;overflow-y:auto;font-family:monospace;line-height:1.8;margin-top:10px}
+.slog{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:12px;font-size:11px;color:var(--mid);max-height:160px;overflow-y:auto;font-family:'Courier New',monospace;line-height:1.9;margin-top:12px}
 .slog-ok{color:var(--green)}.slog-err{color:var(--red)}.slog-inf{color:var(--blue)}
 
+/* SECTION TITLE */
+.sec-ttl{font-size:10px;font-weight:700;color:var(--light);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
+
 /* MISC */
-hr{border:none;border-top:1px solid var(--border);margin:13px 0}
-.sec-ttl{font-size:10px;font-weight:700;color:var(--light);text-transform:uppercase;letter-spacing:.8px;margin-bottom:9px}
-.empty{text-align:center;padding:40px 20px;color:var(--light)}
-.empty-ico{font-size:40px;margin-bottom:8px}
+hr{border:none;border-top:1px solid var(--border);margin:16px 0}
+.empty{text-align:center;padding:48px 20px;color:var(--light)}
+.empty-ico{font-size:36px;margin-bottom:10px;opacity:.5}
 .empty-ttl{font-size:14px;font-weight:600;color:var(--mid)}
 .empty-sub{font-size:12px;margin-top:3px}
 .mt8{margin-top:8px}.mt14{margin-top:14px}.mb14{margin-bottom:14px}
-.jb{justify-content:space-between}
 
-/* CODE */
-.codebox{background:#1C1917;color:#F5E6D3;border-radius:8px;padding:12px;font-size:11px;font-family:monospace;line-height:1.7;overflow-x:auto;margin:8px 0}
+/* DIVIDER LABEL */
+.dlbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#fff;background:var(--dark);padding:6px 12px;margin:0 -18px;margin-top:16px;margin-bottom:0}
 
 /* PRINT */
 @media print{
   .hdr,.nav,.btn,.oacts,.fbar,.stats,.mfoot,.mcls,.steps,.ppill,.syncbar{display:none!important}
   .mover{position:static;background:none;padding:0}
-  .modal{box-shadow:none;max-height:none;max-width:none}
+  .modal{box-shadow:none;max-height:none;max-width:none;border:none}
   .mhdr{position:static}
   body{background:#fff;font-size:12px}
-  .ph{text-align:center;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--brand)}
-  .plogo{font-family:var(--font-d);font-size:20px;font-weight:bold;color:var(--brand)}
+  .ph{display:block!important;text-align:center;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--blue)}
+  .plogo{font-size:18px;font-weight:800;color:var(--blue)}
 }
 .ph{display:none}
 
-@media(max-width:580px){
+@media(max-width:600px){
   .stats{grid-template-columns:1fr 1fr}
-  .pcards{grid-template-columns:1fr}
-  .tier-grid{grid-template-columns:1fr}
+  .pcards,.tier-grid{grid-template-columns:1fr}
   .fg{grid-template-columns:1fr}
-  .oitem{grid-template-columns:1fr}
-  .oacts{margin-top:5px}
+  .olist-hdr{display:none}
+  .oitem{grid-template-columns:1fr auto}
+  .oamt,.oamtsub{display:none}
+  .hdr{padding:0 14px}
+  .nav{padding:0 14px}
+  .wrap{padding:14px 10px}
 }
 </style>
 </head>
 <body>
 
 <header class="hdr">
-  <div class="hdr-logo">Betrés ON <span>·</span> Infarma 2026</div>
+  <div class="hdr-logo">
+    Betrés ON <span class="hdr-logo-accent">— Infarma 2026</span>
+  </div>
   <div class="hdr-r">
     <div id="ppill" class="ppill" style="display:none"></div>
     <div id="sbadge" class="sbadge s-off" onclick="manualSync()" title="Pulsa para sincronizar">
@@ -250,14 +267,14 @@ hr{border:none;border-top:1px solid var(--border);margin:13px 0}
 </header>
 
 <nav class="nav">
-  <div class="ntab active" id="tab-nuevo" onclick="showView('nuevo',this)">✏️ Nuevo Pedido</div>
-  <div class="ntab" id="tab-dashboard" onclick="showView('dashboard',this)">📋 Pedidos <span id="obadge" class="nbadge">0</span></div>
-  <div class="ntab" id="tab-config" onclick="showView('config',this)">⚙️ Configuración</div>
+  <div class="ntab active" id="tab-nuevo" onclick="showView('nuevo',this)">Nuevo Pedido</div>
+  <div class="ntab" id="tab-dashboard" onclick="showView('dashboard',this)">Pedidos <span id="obadge" class="nbadge">0</span></div>
+  <div class="ntab" id="tab-config" onclick="showView('config',this)">Configuración</div>
 </nav>
 
 <div id="toast" class="toast"></div>
 
-<!-- ===== VIEW: NUEVO PEDIDO ===== -->
+<!-- ===== NUEVO PEDIDO ===== -->
 <div id="view-nuevo" class="view active">
 <div class="wrap">
 
@@ -272,17 +289,49 @@ hr{border:none;border-top:1px solid var(--border);margin:13px 0}
   <!-- S1 -->
   <div id="fs1">
     <div class="card">
-      <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">👤</div><div class="card-ttl">Comercial y tipo de promoción</div></div></div>
+      <div class="card-hdr">
+        <div class="card-hdr-l"><div class="card-ico">👤</div><div><div class="card-ttl">Comercial y tipo de promoción</div></div></div>
+      </div>
       <div class="card-body">
-        <div class="fgrp mb14"><label>Comercial que recoge el pedido *</label><select id="sel-com"><option value="">— Selecciona —</option></select></div>
+        <div class="fgrp mb14">
+          <label>Comercial que recoge el pedido *</label>
+          <select id="sel-com"><option value="">— Selecciona —</option></select>
+        </div>
         <div class="sec-ttl">Tipo de promoción</div>
         <div class="pcards">
-          <div class="pcard" id="pc-nav" onclick="selTipo('navidad',this)"><div class="pcard-ico">🎄</div><div class="pcard-ttl">Promoción Navidad</div><div class="pcard-sub">Tramos 18–1.008 uds · Precio escalado</div></div>
-          <div class="pcard" id="pc-nue" onclick="selTipo('nuevas',this)"><div class="pcard-ico">🏪</div><div class="pcard-ttl">Nuevas Aperturas</div><div class="pcard-sub">Promo M / L / XL · Por PVL</div></div>
+          <div class="pcard" id="pc-nav" onclick="selTipo('navidad',this)">
+            <div class="pcard-ico">🎄</div>
+            <div class="pcard-ttl">Promoción Navidad</div>
+            <div class="pcard-sub">Tramos 18 – 1.008 uds · Precio escalado</div>
+          </div>
+          <div class="pcard" id="pc-nue" onclick="selTipo('nuevas',this)">
+            <div class="pcard-ico">🏪</div>
+            <div class="pcard-ttl">Nuevas Aperturas</div>
+            <div class="pcard-sub">Promo M / L / XL · Por PVL</div>
+          </div>
         </div>
       </div>
     </div>
     <div class="btn-row" style="justify-content:flex-end"><button class="btn btn-p" onclick="goStep(2)">Continuar →</button></div>
+  </div>
+
+  <!-- HOJA DE PEDIDO -->
+  <div id="fs1b" style="margin-top:24px">
+    <div class="card">
+      <div class="card-hdr">
+        <div class="card-hdr-l">
+          <div class="card-ico">📄</div>
+          <div>
+            <div class="card-ttl">Hoja de Pedido</div>
+            <div class="card-sub">Formulario de pedido detallado por producto</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <p style="font-size:13px;color:var(--mid);line-height:1.6;flex:1;min-width:200px">Accede a la hoja de pedido completa para introducir referencias y cantidades por producto.</p>
+        <button class="btn btn-p" onclick="window.open('https://digitalmanagernatu-cell.github.io/pedidosb3/','_blank')">Abrir hoja de pedido →</button>
+      </div>
+    </div>
   </div>
 
   <!-- S2 -->
@@ -292,7 +341,7 @@ hr{border:none;border-top:1px solid var(--border);margin:13px 0}
       <div class="card-body">
         <div class="fg">
           <div class="fgrp full"><label>Farmacia / Empresa *</label><input type="text" id="c-far" placeholder="Farmacia García"></div>
-          <div class="fgrp"><label>Código cliente (SAP)</label><input type="text" id="c-cod" placeholder="SAP001"></div>
+          <div class="fgrp"><label>Código cliente SAP</label><input type="text" id="c-cod" placeholder="SAP001"></div>
           <div class="fgrp"><label>CIF / NIF *</label><input type="text" id="c-cif" placeholder="B12345678"></div>
           <div class="fgrp"><label>Grupo de compra</label><input type="text" id="c-grp" placeholder="Alliance, Farmacoop…"></div>
           <div class="fgrp"><label>Provincia / Ciudad</label><input type="text" id="c-prv" placeholder="Madrid"></div>
@@ -308,30 +357,30 @@ hr{border:none;border-top:1px solid var(--border);margin:13px 0}
   <!-- S3 NAVIDAD -->
   <div id="fs3n" style="display:none">
     <div class="card">
-      <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">🎄</div><div class="card-ttl">Promoción Navidad · Condiciones</div></div></div>
+      <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">🎄</div><div class="card-ttl">Promoción Navidad</div></div></div>
       <div class="card-body">
-        <div class="sec-ttl">Tramo seleccionado</div>
+        <div class="sec-ttl">Selecciona tramo</div>
         <div class="tramo-grid">
           <div class="tbtn" onclick="selTramo(18,this)"><div class="tuds">18</div><div class="tprice">1,17 €/ud</div></div>
           <div class="tbtn" onclick="selTramo(126,this)"><div class="tuds">126</div><div class="tprice">1,14 €/ud</div></div>
           <div class="tbtn" onclick="selTramo(252,this)"><div class="tuds">252</div><div class="tprice">1,10 €/ud</div></div>
           <div class="tbtn" onclick="selTramo(504,this)"><div class="tuds">504</div><div class="tprice">1,05 €/ud</div><div class="tbonus">+40 uds sin cargo</div></div>
-          <div class="tbtn" onclick="selTramo(1008,this)"><div class="tuds">1.008</div><div class="tprice">0,98 €/ud</div><div class="tbonus">MEJOR PRECIO</div></div>
+          <div class="tbtn" onclick="selTramo(1008,this)"><div class="tuds">1.008</div><div class="tprice">0,98 €/ud</div><div class="tbonus">Mejor precio</div></div>
         </div>
         <div id="nav-sum" class="sbox" style="display:none">
           <div class="srow"><span class="slbl">Uds facturadas</span><span class="sval" id="s-uf">—</span></div>
           <div class="srow" id="sr-bon" style="display:none"><span class="slbl">Uds sin cargo</span><span class="sval bon" id="s-bon">—</span></div>
-          <div class="srow" id="sr-tot" style="display:none"><span class="slbl">Uds totales entregadas</span><span class="sval" id="s-tot">—</span></div>
+          <div class="srow" id="sr-tot" style="display:none"><span class="slbl">Total uds entregadas</span><span class="sval" id="s-tot">—</span></div>
           <div class="srow"><span class="slbl">Precio / unidad</span><span class="sval" id="s-prc">—</span></div>
           <div class="srow"><span class="slbl">Importe pedido</span><span class="sval hi" id="s-imp">—</span></div>
           <div class="srow"><span class="slbl">Forma de pago</span><span class="sval">60 días desde el envío</span></div>
         </div>
-        <div id="nav-cnd" class="cbox" style="display:none"><div class="cbox-ttl">✓ Condiciones aplicables</div><div class="cbox-body" id="cnd-txt"></div></div>
+        <div id="nav-cnd" class="cbox" style="display:none"><div class="cbox-ttl">Condiciones aplicables</div><div class="cbox-body" id="cnd-txt"></div></div>
         <hr>
         <div class="fg">
           <div class="fgrp"><label>Tipo de entrega</label><select id="nav-ent"><option value="tras_feria">Tras feria</option><option value="programada">Programada</option></select></div>
           <div class="fgrp"><label>Fecha envío prevista</label><input type="date" id="nav-fenv"></div>
-          <div class="fgrp full"><label>Observaciones</label><textarea id="nav-obs" placeholder="Notas…"></textarea></div>
+          <div class="fgrp full"><label>Observaciones</label><textarea id="nav-obs" placeholder="Notas adicionales…"></textarea></div>
         </div>
       </div>
     </div>
@@ -341,15 +390,15 @@ hr{border:none;border-top:1px solid var(--border);margin:13px 0}
   <!-- S3 NUEVAS -->
   <div id="fs3a" style="display:none">
     <div class="card">
-      <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">🏪</div><div class="card-ttl">Nuevas Aperturas · Condiciones</div></div></div>
+      <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">🏪</div><div class="card-ttl">Nuevas Aperturas</div></div></div>
       <div class="card-body">
-        <div class="sec-ttl">Promoción seleccionada</div>
+        <div class="sec-ttl">Selecciona promoción</div>
         <div class="tier-grid">
           <div class="tcard" onclick="selTier('M',this)"><div class="tl">M</div><div class="tmin">Mín. 600 € PVL</div><div class="tdto">5% descuento</div><div class="tpago">Pago 60 días</div></div>
           <div class="tcard" onclick="selTier('L',this)"><div class="tl">L</div><div class="tmin">Mín. 1.000 € PVL</div><div class="tdto">8% descuento</div><div class="tpago">Pago 30-60 días</div></div>
           <div class="tcard" onclick="selTier('XL',this)"><div class="tl">XL</div><div class="tmin">Mín. 1.500 € PVL</div><div class="tdto">10% descuento</div><div class="tpago">Pago 30-60-85 días</div></div>
         </div>
-        <div id="na-pvl-sec" style="display:none;margin-top:14px">
+        <div id="na-pvl-sec" style="display:none;margin-top:16px">
           <div class="fg">
             <div class="fgrp"><label>PVL pedido (€) *</label><input type="number" id="na-pvl" placeholder="1500.00" min="0" step="0.01" oninput="calcNA()"></div>
             <div class="fgrp"><label>Forma de pago</label><input type="text" id="na-pago" readonly></div>
@@ -360,13 +409,13 @@ hr{border:none;border-top:1px solid var(--border);margin:13px 0}
             <div class="srow"><span class="slbl">Importe descuento</span><span class="sval bon" id="na-imp-v">—</span></div>
             <div class="srow"><span class="slbl">PVL neto</span><span class="sval hi" id="na-net-v">—</span></div>
           </div>
-          <div id="na-cnd" class="cbox" style="margin-top:10px"><div class="cbox-ttl">✓ Condiciones aplicables</div><div class="cbox-body" id="na-cnd-txt"></div></div>
+          <div id="na-cnd" class="cbox" style="margin-top:12px"><div class="cbox-ttl">Condiciones aplicables</div><div class="cbox-body" id="na-cnd-txt"></div></div>
         </div>
         <hr>
         <div class="fg">
           <div class="fgrp"><label>Tipo de entrega</label><select id="na-ent"><option value="tras_feria">Tras feria</option><option value="programada">Programada</option></select></div>
           <div class="fgrp"><label>Fecha envío prevista</label><input type="date" id="na-fenv"></div>
-          <div class="fgrp full"><label>Observaciones</label><textarea id="na-obs" placeholder="Notas…"></textarea></div>
+          <div class="fgrp full"><label>Observaciones</label><textarea id="na-obs" placeholder="Notas adicionales…"></textarea></div>
         </div>
       </div>
     </div>
@@ -377,9 +426,12 @@ hr{border:none;border-top:1px solid var(--border);margin:13px 0}
   <div id="fs4" style="display:none">
     <div class="card">
       <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">📦</div><div class="card-ttl">Mix del pedido / Implantación</div></div></div>
-      <div class="card-body" id="cats-body"></div>
+      <div class="card-body" style="padding:0">
+        <div class="ctable-hdr"><div></div><div>Categoría</div><div>Observaciones</div></div>
+        <div id="cats-body"></div>
+      </div>
     </div>
-    <div class="btn-row jb"><button class="btn btn-g" onclick="goStep(3)">← Atrás</button><button class="btn btn-p" onclick="goStep(5)">Continuar →</button></div>
+    <div class="btn-row jb" style="padding:0 4px"><button class="btn btn-g" onclick="goStep(3)">← Atrás</button><button class="btn btn-p" onclick="goStep(5)">Continuar →</button></div>
   </div>
 
   <!-- S5 CONFIRM -->
@@ -388,11 +440,11 @@ hr{border:none;border-top:1px solid var(--border);margin:13px 0}
       <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">✅</div><div class="card-ttl">Resumen y confirmación</div></div></div>
       <div class="card-body" id="conf-body"></div>
     </div>
-    <div class="btn-row jb">
+    <div class="btn-row jb" style="padding:0 4px">
       <button class="btn btn-g" onclick="goStep(4)">← Atrás</button>
       <div class="btn-row">
-        <button class="btn btn-s" onclick="savePed('borrador')">💾 Borrador</button>
-        <button class="btn btn-p" onclick="savePed('confirmado')">✅ Confirmar pedido</button>
+        <button class="btn btn-g" onclick="savePed('borrador')">Guardar borrador</button>
+        <button class="btn btn-p" onclick="savePed('confirmado')">Confirmar pedido</button>
       </div>
     </div>
   </div>
@@ -400,98 +452,80 @@ hr{border:none;border-top:1px solid var(--border);margin:13px 0}
 </div>
 </div>
 
-<!-- ===== VIEW: DASHBOARD ===== -->
+<!-- ===== DASHBOARD ===== -->
 <div id="view-dashboard" class="view">
 <div class="wrap">
 
-  <div id="syncbar" class="syncbar">
+  <div class="syncbar">
     <div class="syncbar-l">
-      <div id="si" class="sync-indicator si-ok"></div>
+      <div id="si" class="si si-ok"></div>
       <span id="sync-lbl">Última sincronización: —</span>
     </div>
     <div class="syncbar-r">
-      <button class="btn btn-b btn-sm" id="syncbtn" onclick="manualSync()">🔄 Sincronizar ahora</button>
-      <button class="btn btn-s btn-sm" onclick="exportCSV()">⬇️ CSV</button>
+      <button class="btn btn-s btn-sm" id="syncbtn" onclick="manualSync()">↻ Sincronizar ahora</button>
+      <button class="btn btn-g btn-sm" onclick="exportCSV()">↓ CSV</button>
     </div>
   </div>
 
   <div class="stats">
     <div class="stat"><div class="stn" id="st-tot">0</div><div class="stl">Total pedidos</div></div>
     <div class="stat"><div class="stn" id="st-nav" style="color:#C2410C">0</div><div class="stl">Navidad</div></div>
-    <div class="stat"><div class="stn" id="st-nue" style="color:#1D4ED8">0</div><div class="stl">Nuevas Apert.</div></div>
-    <div class="stat"><div class="stn" id="st-vol" style="font-size:18px">0 €</div><div class="stl">Vol. confirmado</div></div>
+    <div class="stat"><div class="stn" id="st-nue">0</div><div class="stl">Nuevas Apert.</div></div>
+    <div class="stat"><div class="stn" id="st-vol" style="font-size:20px">0 €</div><div class="stl">Vol. confirmado</div></div>
   </div>
 
   <div class="fbar">
-    <input type="text" id="f-srch" placeholder="🔍 Buscar farmacia…" oninput="renderDash()">
+    <input type="text" id="f-srch" placeholder="Buscar farmacia…" oninput="renderDash()">
     <select id="f-com" onchange="renderDash()"><option value="">Todos los comerciales</option></select>
     <select id="f-tip" onchange="renderDash()"><option value="">Todos los tipos</option><option value="navidad">Navidad</option><option value="nuevas">Nuevas Aperturas</option></select>
     <select id="f-est" onchange="renderDash()"><option value="">Todos los estados</option><option value="confirmado">Confirmados</option><option value="borrador">Borradores</option></select>
   </div>
 
-  <div class="olist" id="olist">
-    <div class="empty"><div class="empty-ico">📋</div><div class="empty-ttl">Sin pedidos</div><div class="empty-sub">Los pedidos aparecerán aquí</div></div>
+  <div class="olist">
+    <div class="olist-hdr"><div>Farmacia</div><div>Tipo</div><div>Estado</div><div style="text-align:right">Importe</div></div>
+    <div id="olist">
+      <div class="empty"><div class="empty-ico">📋</div><div class="empty-ttl">Sin pedidos</div><div class="empty-sub">Los pedidos aparecerán aquí</div></div>
+    </div>
   </div>
 </div>
 </div>
 
-<!-- ===== VIEW: CONFIG ===== -->
+<!-- ===== CONFIG ===== -->
 <div id="view-config" class="view">
 <div class="wrap">
-
   <div class="card">
     <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">👥</div><div class="card-ttl">Equipo comercial</div></div></div>
     <div class="card-body">
-      <div class="fgrp mb14"><label>Comerciales (uno por línea)</label><textarea id="coms-inp" rows="6" placeholder="Irene García&#10;Carlos Martínez&#10;Ana López"></textarea></div>
-      <button class="btn btn-p" onclick="saveComs()">Guardar equipo</button>
+      <div class="fgrp mb14"><label>Comerciales (uno por línea)</label><textarea id="coms-inp" rows="7"></textarea></div>
+      <button class="btn btn-p btn-sm" onclick="saveComs()">Guardar equipo</button>
     </div>
   </div>
-
   <div class="card">
-    <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">🔗</div><div class="card-ttl">Conexión n8n · Sincronización</div></div></div>
+    <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">🔗</div><div class="card-ttl">Conexión n8n</div></div></div>
     <div class="card-body">
-      <div class="alert a-info">
-        <strong>Cómo funciona:</strong> La app guarda todos los pedidos localmente aunque no haya conexión. Cuando hay conexión, sincroniza automáticamente con n8n en dos sentidos: <strong>sube</strong> los pedidos nuevos y <strong>descarga</strong> los pedidos de los demás comerciales.<br><br>
-        Necesitas dos webhooks en n8n: uno <strong>POST</strong> para recibir pedidos y uno <strong>GET</strong> para devolver el listado completo.
-      </div>
+      <div class="alert a-info">La app sincroniza automáticamente cada 30 segundos cuando hay conexión. Los pedidos sin conexión se guardan localmente y se suben al reconectar.</div>
       <div class="fg">
-        <div class="fgrp full"><label>Webhook POST (guardar pedido)</label><input type="text" id="wh-post" placeholder="https://natulab.app.n8n.cloud/webhook/betres-pedido"></div>
-        <div class="fgrp full"><label>Webhook GET (obtener todos los pedidos)</label><input type="text" id="wh-get" placeholder="https://natulab.app.n8n.cloud/webhook/betres-pedidos"></div>
-        <div class="fgrp full"><label>Email para notificaciones</label><input type="email" id="notif-eml" placeholder="irene@natu.es"></div>
+        <div class="fgrp full"><label>Webhook POST (guardar pedido)</label><input type="text" id="wh-post"></div>
+        <div class="fgrp full"><label>Webhook GET (obtener pedidos)</label><input type="text" id="wh-get"></div>
+        <div class="fgrp full"><label>Email notificaciones</label><input type="email" id="notif-eml"></div>
       </div>
       <div class="btn-row mt8">
-        <button class="btn btn-p" onclick="saveCfg()">Guardar config</button>
-        <button class="btn btn-b" onclick="testSync()">🧪 Probar conexión</button>
+        <button class="btn btn-p btn-sm" onclick="saveCfg()">Guardar</button>
+        <button class="btn btn-s btn-sm" onclick="testSync()">Probar conexión</button>
       </div>
       <div id="sync-log" class="slog" style="display:none"></div>
     </div>
   </div>
-
   <div class="card">
-    <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">📋</div><div class="card-ttl">Workflow n8n · Instrucciones</div></div></div>
-    <div class="card-body">
-      <div class="alert a-warn">Importa el archivo <strong>n8n_betres_infarma.json</strong> en tu instancia de n8n. Encontrarás también el archivo descargado junto a esta app.</div>
-      <p style="font-size:12px;color:var(--mid);line-height:1.8;margin-bottom:10px">El workflow tiene <strong>3 flujos</strong>:</p>
-      <div style="font-size:12px;line-height:2;color:var(--dark)">
-        <div>📥 <strong>Recibir pedido</strong> (POST) → Upsert en Google Sheets → Respuesta JSON</div>
-        <div>📤 <strong>Devolver pedidos</strong> (GET) → Leer Google Sheets → Respuesta JSON</div>
-        <div>📧 <strong>Notificación</strong> (trigger automático) → Email resumen del día</div>
-      </div>
-      <p style="font-size:12px;color:var(--mid);margin-top:10px">Crea una hoja de cálculo en Google Sheets con este nombre exacto: <strong>PedidosInfarma2026</strong> y deja que n8n cree las columnas automáticamente en el primer pedido.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">🗂️</div><div class="card-ttl">Gestión de datos</div></div></div>
+    <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">🗂️</div><div class="card-ttl">Datos</div></div></div>
     <div class="card-body">
       <div class="btn-row">
-        <button class="btn btn-s" onclick="exportCSV()">⬇️ Exportar CSV</button>
-        <button class="btn btn-d btn-sm" onclick="clearAll()">🗑️ Borrar datos locales</button>
+        <button class="btn btn-g btn-sm" onclick="exportCSV()">↓ Exportar CSV</button>
+        <button class="btn btn-d btn-sm" onclick="clearAll()">Borrar datos locales</button>
       </div>
       <div id="sq-info" style="margin-top:10px;font-size:12px;color:var(--mid)"></div>
     </div>
   </div>
-
 </div>
 </div>
 
@@ -505,6 +539,7 @@ hr{border:none;border-top:1px solid var(--border);margin:13px 0}
 </div>
 
 <script>
+
 // ══════════════════════════════════════════
 // DATA
 // ══════════════════════════════════════════
@@ -768,7 +803,7 @@ function renderCats(){
     <div class="crow">
       <div class="ccheck${CATS[c.id].on?' on':''}" id="cc-${c.id}" onclick="togCat('${c.id}')">${CATS[c.id].on?'✓':''}</div>
       <span class="cname">${c.lbl}</span>
-      <input class="cobs" type="text" placeholder="Obs…" value="${CATS[c.id].obs||''}" oninput="CATS['${c.id}'].obs=this.value">
+      <input class="cobs" type="text" placeholder="Observaciones…" value="${CATS[c.id].obs||''}" oninput="CATS['${c.id}'].obs=this.value">
     </div>`).join('');
 }
 function togCat(id){
@@ -872,19 +907,26 @@ function renderDash(){
   if(!fl.length){ol.innerHTML='<div class="empty"><div class="empty-ico">📋</div><div class="empty-ttl">Sin resultados</div><div class="empty-sub">Ajusta los filtros</div></div>';return;}
   ol.innerHTML=fl.map(p=>{
     const isN=p.tipo==='navidad';
-    const det=isN?`${p.nav?.tramo?.toLocaleString('es-ES')} uds · ${p.nav?.imp?.toFixed(2).replace('.',',')} €`:`Tarifa ${p.nue?.tier} · PVL neto ${p.nue?.net?.toFixed(2).replace('.',',')} €`;
+    const imp=isN?(p.nav?.imp||0):(p.nue?.net||0);
+    const det=isN?`${p.nav?.tramo?.toLocaleString('es-ES')} uds`:`Tarifa ${p.nue?.tier}`;
     return`<div class="oitem">
-      <div><div class="ofarm">${p.cli.far}</div>
-        <div class="ometa">${p.fecha} · ${det} · <b>${p.com}</b>${!p.sync?' · <span style="color:var(--accent)">⏳ pendiente sync</span>':''}</div>
+      <div>
+        <div class="ofarm">${p.cli.far}${!p.sync?' <span style="font-size:10px;color:var(--orange);font-weight:500">⏳ pendiente sync</span>':''}</div>
+        <div class="ometa">${p.fecha} · ${det} · ${p.com}</div>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
-        <span class="badge ${isN?'b-nav':'b-nue'}">${isN?'🎄 Navidad':'🏪 N.Apert.'}</span>
-        <span class="badge ${p.estado==='confirmado'?'b-con':'b-bor'}">${p.estado==='confirmado'?'✓ Confirmado':'📝 Borrador'}</span>
+      <div>
+        <span class="badge ${isN?'b-nav':'b-nue'}">${isN?'Navidad':'N. Apert.'}</span>
       </div>
-      <div class="oacts">
-        <button class="btn btn-s btn-sm" onclick="openP('${p.id}')">Ver</button>
-        <button class="btn btn-g btn-sm" onclick="emailP('${p.id}')" title="Email">✉️</button>
-        <button class="btn btn-g btn-sm" onclick="printP('${p.id}')" title="Imprimir">🖨️</button>
+      <div>
+        <span class="badge ${p.estado==='confirmado'?'b-con':'b-bor'}">${p.estado==='confirmado'?'Confirmado':'Borrador'}</span>
+      </div>
+      <div>
+        <div class="oamt">${imp.toFixed(2).replace('.',',')} €</div>
+        <div class="oacts" style="margin-top:4px">
+          <button class="btn btn-s btn-sm" onclick="openP('${p.id}')">Ver</button>
+          <button class="btn btn-g btn-sm" onclick="emailP('${p.id}')" title="Email">✉️</button>
+          <button class="btn btn-g btn-sm" onclick="printP('${p.id}')" title="Imprimir">🖨️</button>
+        </div>
       </div>
     </div>`;
   }).join('');
@@ -1096,6 +1138,15 @@ if ('serviceWorker' in navigator) {
         console.warn('SW not available:', e2.message);
       }
     }
+  });
+}
+
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("betres-sw.js").catch(e => console.warn("SW:", e.message));
   });
 }
 </script>
