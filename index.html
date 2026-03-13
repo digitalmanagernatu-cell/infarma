@@ -737,6 +737,7 @@ function goStep(n){
     if(pvl<TA[TIER].min){toast('⚠️ PVL inferior al mínimo de '+TA[TIER].min+'€ para tarifa '+TIER,'warn');return;}
   }
   ['fs1','fs2','fs3n','fs3a','fs4','fs5'].forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById('fs1b').style.display=n===1?'block':'none';
   for(let i=1;i<=5;i++){const el=document.getElementById('sp'+i);el.className='step'+(i<n?' done':i===n?' active':'');}
   if(n===1)document.getElementById('fs1').style.display='block';
   else if(n===2)document.getElementById('fs2').style.display='block';
