@@ -282,8 +282,7 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
     <div class="step active" id="sp1"><div class="sc">1</div><div class="sl">Tipo</div></div>
     <div class="step" id="sp2"><div class="sc">2</div><div class="sl">Cliente</div></div>
     <div class="step" id="sp3"><div class="sc">3</div><div class="sl">Pedido</div></div>
-    <div class="step" id="sp4"><div class="sc">4</div><div class="sl">Mix</div></div>
-    <div class="step" id="sp5"><div class="sc">5</div><div class="sl">Confirmar</div></div>
+    <div class="step" id="sp5"><div class="sc">4</div><div class="sl">Confirmar</div></div>
   </div>
 
   <!-- S1 -->
@@ -422,7 +421,7 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
   </div>
 
   <!-- S4 MIX -->
-  <div id="fs4" style="display:none">
+  <div id="fs4" style="display:none!important" hidden style="display:none">
     <div class="card">
       <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">📦</div><div class="card-ttl">Mix del pedido / Implantación</div></div></div>
       <div class="card-body" style="padding:0">
@@ -440,7 +439,7 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
       <div class="card-body" id="conf-body"></div>
     </div>
     <div class="btn-row jb" style="padding:0 4px">
-      <button class="btn btn-g" onclick="goStep(4)">← Atrás</button>
+      <button class="btn btn-g" onclick="goStep(3)">← Atrás</button>
       <div class="btn-row">
         <button class="btn btn-g" onclick="savePed('borrador')">Guardar borrador</button>
         <button class="btn btn-p" onclick="savePed('confirmado')">Confirmar pedido</button>
@@ -737,7 +736,7 @@ function goStep(n){
   }
   ['fs1','fs2','fs3n','fs3a','fs4','fs5'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('fs1b').style.display=n===1?'block':'none';
-  for(let i=1;i<=5;i++){const el=document.getElementById('sp'+i);el.className='step'+(i<n?' done':i===n?' active':'');}
+  [1,2,3,5].forEach(i=>{const el=document.getElementById('sp'+i);if(!el)return;const rank={1:1,2:2,3:3,5:4}[i];const cur={1:1,2:2,3:3,5:4}[n]||n;el.className='step'+(rank<cur?' done':rank===cur?' active':'');});
   if(n===1)document.getElementById('fs1').style.display='block';
   else if(n===2)document.getElementById('fs2').style.display='block';
   else if(n===3){document.getElementById(TIPO==='navidad'?'fs3n':'fs3a').style.display='block';}
