@@ -312,7 +312,6 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
         </div>
       </div>
     </div>
-    <div class="btn-row" style="justify-content:flex-end"><button class="btn btn-p" onclick="goStep(2)">Continuar →</button></div>
   </div>
 
   <!-- HOJA DE PEDIDO -->
@@ -750,7 +749,14 @@ function goStep(n){
 // ══════════════════════════════════════════
 // FORM LOGIC
 // ══════════════════════════════════════════
-function selTipo(t,el){TIPO=t;TRAMO=null;TIER=null;document.getElementById('pc-nav').classList.toggle('sel',t==='navidad');document.getElementById('pc-nue').classList.toggle('sel',t==='nuevas');}
+function selTipo(t,el){
+  TIPO=t;TRAMO=null;TIER=null;
+  document.getElementById('pc-nav').classList.toggle('sel',t==='navidad');
+  document.getElementById('pc-nue').classList.toggle('sel',t==='nuevas');
+  const com=document.getElementById('sel-com').value;
+  if(!com){toast('Selecciona un comercial primero','err');return;}
+  setTimeout(()=>goStep(2),150);
+}
 
 function selTramo(u,el){
   TRAMO=u;
