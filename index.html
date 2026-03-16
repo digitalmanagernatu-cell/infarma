@@ -398,9 +398,9 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
         </div>
         <div id="na-pvl-sec" style="display:none;margin-top:16px">
           <div class="fg">
-            <div class="fgrp"><label>PVL pedido (€) *</label><input type="number" id="na-pvl" placeholder="1500.00" min="0" step="0.01" oninput="calcNA()"></div>
             <div class="fgrp"><label>Forma de pago</label><input type="text" id="na-pago" readonly></div>
           </div>
+          <input type="hidden" id="na-pvl" value="0">
           <div id="na-sum" class="sbox" style="display:none">
             <div class="srow"><span class="slbl">PVL pedido</span><span class="sval" id="na-pvl-v">—</span></div>
             <div class="srow"><span class="slbl">Descuento directo</span><span class="sval bon" id="na-dto-v">—</span></div>
@@ -731,11 +731,7 @@ function goStep(n){
   if(n>2){const eml=document.getElementById('c-eml').value.trim();if(!eml||!/^[^@]+@[^@]+\.[^@]+$/.test(eml)){toast('Introduce un email de cliente válido','err');return;}}
   if(n>3&&TIPO==='navidad'&&!TRAMO){toast('Selecciona un tramo','err');return;}
   if(n>3&&TIPO==='nuevas'&&!TIER){toast('Selecciona una promoción M/L/XL','err');return;}
-  if(n>3&&TIPO==='nuevas'){
-    const pvl=parseFloat(document.getElementById('na-pvl').value)||0;
-    if(!pvl){toast('Introduce el PVL del pedido','err');return;}
-    if(pvl<TA[TIER].min){toast('⚠️ PVL inferior al mínimo de '+TA[TIER].min+'€ para tarifa '+TIER,'warn');return;}
-  }
+
   ['fs1','fs2','fs3n','fs3a','fs4','fs5'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('fs1b').style.display=n===1?'block':'none';
   [1,2,3,5].forEach(i=>{const el=document.getElementById('sp'+i);if(!el)return;const rank={1:1,2:2,3:3,5:4}[i];const cur={1:1,2:2,3:3,5:4}[n]||n;el.className='step'+(rank<cur?' done':rank===cur?' active':'');});
@@ -789,18 +785,9 @@ function selTier(t,el){
 }
 function calcNA(){
   if(!TIER)return;
-  const pvl=parseFloat(document.getElementById('na-pvl').value)||0;
-  if(!pvl){document.getElementById('na-sum').style.display='none';return;}
-  const ta=TA[TIER],dto=pvl*ta.d,net=pvl-dto;
-  const f=v=>v.toFixed(2).replace('.',',')+' €';
-  document.getElementById('na-pvl-v').textContent=f(pvl);
-  document.getElementById('na-dto-v').textContent=(ta.d*100)+'%';
-  document.getElementById('na-imp-v').textContent='−'+f(dto);
-  const nEl=document.getElementById('na-net-v');
-  nEl.textContent=f(net);
-  const s=document.getElementById('na-sum');s.style.display='block';
-  if(pvl<ta.min){s.style.background='#FEF2F2';s.style.borderColor='#FCA5A5';nEl.style.color='var(--red)';}
-  else{s.style.background='';s.style.borderColor='';nEl.style.color='';}
+  const ta=TA[TIER];
+  const pagoEl=document.getElementById('na-pago');
+  if(pagoEl)pagoEl.value=ta.pago;
 }
 
 function renderCats(){
