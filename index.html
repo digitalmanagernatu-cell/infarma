@@ -821,7 +821,9 @@ function renderConf(){
     <div class="srow"><span class="slbl">Mínimo de pedido</span><span class="sval">${ta.min.toLocaleString('es-ES')} € PVL</span></div>
     <div class="srow"><span class="slbl">Descuento directo</span><span class="sval bon">${ta.d*100}%</span></div>
     <div class="srow"><span class="slbl">Reposición</span><span class="sval bon">${ta.rep}</span></div>
-    <div class="srow"><span class="slbl">Forma de pago</span><span class="sval">${ta.pago}</span></div></div>`;}
+    <div class="srow"><span class="slbl">Forma de pago</span><span class="sval">${ta.pago}</span></div>
+    </div>
+    <div class="cbox" style="margin-top:10px"><div class="cbox-ttl">Condiciones completas</div><div class="cbox-body">${ta.conds.map(c=>'✓ '+c).join('<br>')}</div></div>`;}
   const cats=TIPO==='navidad'?CN:CA;
   const actv=Object.entries(CATS).filter(([k,vv])=>vv.on);
   document.getElementById('conf-body').innerHTML=`
