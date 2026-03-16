@@ -382,7 +382,7 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
         </div>
       </div>
     </div>
-    <div class="btn-row jb"><button class="btn btn-g" onclick="goStep(2)">← Atrás</button><button class="btn btn-p" onclick="goStep(4)">Continuar →</button></div>
+    <div class="btn-row jb"><button class="btn btn-g" onclick="goStep(2)">← Atrás</button><button class="btn btn-p" onclick="goStep(5)">Continuar →</button></div>
   </div>
 
   <!-- S3 NUEVAS -->
@@ -417,7 +417,7 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
         </div>
       </div>
     </div>
-    <div class="btn-row jb"><button class="btn btn-g" onclick="goStep(2)">← Atrás</button><button class="btn btn-p" onclick="goStep(4)">Continuar →</button></div>
+    <div class="btn-row jb"><button class="btn btn-g" onclick="goStep(2)">← Atrás</button><button class="btn btn-p" onclick="goStep(5)">Continuar →</button></div>
   </div>
 
   <!-- S4 MIX -->
@@ -844,7 +844,7 @@ function renderConf(){
     </div>
     <div class="sec-ttl">Condiciones del pedido</div>${promo}
     ${actv.length?`<div class="sec-ttl" style="margin-top:14px">Categorías seleccionadas</div>
-    <div style="background:var(--brand-bg);border-radius:8px;padding:10px">
+    <div style="background:var(--blue-bg);border-radius:8px;padding:10px">
       ${actv.map(([id,vv])=>{const c=cats.find(x=>x.id===id);return`<div style="font-size:12px;padding:2px 0">✓ <b>${c?.lbl}</b>${vv.obs?' · <span style="color:var(--mid)">'+vv.obs+'</span>':''}</div>`;}).join('')}
     </div>`:''}`;
 }
@@ -983,7 +983,7 @@ async function openP(id){
     </div>
     <div class="sec-ttl">Condiciones del pedido</div>${det}
     ${actv.length?`<div class="sec-ttl" style="margin-top:14px">Categorías / Implantación</div>
-    <div style="background:var(--brand-bg);border-radius:8px;padding:10px">${actv.map(([id,vv])=>{const c=cats.find(x=>x.id===id);return`<div style="font-size:12px;padding:2px 0">✓ <b>${c?.lbl}</b>${vv.obs?' · '+vv.obs:''}</div>`;}).join('')}</div>`:''}
+    <div style="background:var(--blue-bg);border-radius:8px;padding:10px">${actv.map(([id,vv])=>{const c=cats.find(x=>x.id===id);return`<div style="font-size:12px;padding:2px 0">✓ <b>${c?.lbl}</b>${vv.obs?' · '+vv.obs:''}</div>`;}).join('')}</div>`:''}
     ${obs?`<div style="margin-top:12px"><div class="sec-ttl">Observaciones</div><div style="background:#F9F7F5;border-radius:7px;padding:9px;font-size:12px">${obs}</div></div>`:''}
     <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font-size:10px;color:var(--light);text-align:center">Betrés ON · Natu Laboratories · Infarma Madrid 2026 · ${p.id}</div>`;
   document.getElementById('m-foot').innerHTML=`
