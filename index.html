@@ -862,7 +862,7 @@ function renderConf(){
 // ══════════════════════════════════════════
 async function sendEmailCliente(){
   const cfg=await getCfg();
-  const whEmail=cfg.whEmail||'';
+  const whEmail=cfg.whEmail||DEFAULT_WH_EMAIL||'';
   if(!whEmail){toast('Webhook de email no configurado en Ajustes','err');return;}
   const eml=document.getElementById('c-eml').value.trim();
   if(!eml){toast('El email del cliente es obligatorio','err');return;}
