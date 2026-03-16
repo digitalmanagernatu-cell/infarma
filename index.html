@@ -897,6 +897,44 @@ async function sendEmailCliente(btn){
 }
 
 // ══════════════════════════════════════════
+// SEND EMAIL FROM MODAL (dashboard)
+// ══════════════════════════════════════════
+async function sendEmailDesdeModal(id, btn){
+  const p=PEDS.find(x=>x.id===id);if(!p)return;
+  const eml=p.cli.eml;
+  if(!eml){toast('Este pedido no tiene email de cliente','err');return;}
+  const cfg=await getCfg();
+  const whEmail=cfg.whEmail||DEFAULT_WH_EMAIL||'';
+  if(!whEmail){toast('Webhook de email no configurado','err');return;}
+  // Build resumen from saved order
+  let resumen='';
+  if(p.tipo==='navidad'&&p.nav){
+    const n=p.nav;
+    resumen=`Promoción: Navidad Infarma 2026\nTramo: ${n.tramo?.toLocaleString('es-ES')} uds\nPrecio/ud: ${n.prc?.toFixed(2).replace('.',',')} €\nImporte: ${n.imp?.toFixed(2).replace('.',',')} €${n.bonus>0?'\nUds sin cargo: +'+n.bonus:''}\nForma de pago: 60 días desde el envío`;
+  } else if(p.nue){
+    const n=p.nue;
+    resumen=`Promoción: Nuevas Aperturas · Tarifa ${n.tier}\nPVL pedido: ${n.pvl?.toFixed(2).replace('.',',')} €\nDescuento: ${(n.dto*100)}%\nPVL neto: ${n.net?.toFixed(2).replace('.',',')} €\nForma de pago: ${n.pago}`;
+  }
+  const payload={
+    email_cliente:eml,
+    farmacia:p.cli.far,
+    comercial:p.com,
+    tipo:p.tipo,
+    resumen,
+    fecha:p.fecha
+  };
+  btn.disabled=true;btn.textContent='Enviando…';
+  try{
+    const r=await fetch(whEmail,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(r.ok){toast('✉️ Email enviado a '+eml,'ok');btn.textContent='✉️ Email enviado ✓';btn.classList.add('btn-p');}
+    else throw new Error('HTTP '+r.status);
+  }catch(e){
+    toast('Error: '+e.message,'err');
+    btn.disabled=false;btn.textContent='✉️ Enviar SEPA al cliente';
+  }
+}
+
+// ══════════════════════════════════════════
 // SAVE ORDER
 // ══════════════════════════════════════════
 async function savePed(estado){
@@ -1036,7 +1074,8 @@ async function openP(id){
   document.getElementById('m-foot').innerHTML=`
     <button class="btn btn-g btn-sm" onclick="closeM()">Cerrar</button>
     ${p.estado==='borrador'?`<button class="btn btn-s btn-sm" onclick="confP('${p.id}')">✅ Confirmar</button>`:''}
-    <button class="btn btn-g btn-sm" onclick="emailP('${p.id}')">✉️ Email</button>
+    ${p.cli.eml?`<button class="btn btn-s btn-sm" onclick="sendEmailDesdeModal('${p.id}',this)">✉️ Enviar SEPA al cliente</button>`:''}
+    <button class="btn btn-g btn-sm" onclick="emailP('${p.id}')">📧 Email notif.</button>
     <button class="btn btn-s btn-sm" onclick="printM()">🖨️ Imprimir</button>
     <button class="btn btn-d btn-sm" onclick="delP('${p.id}')">🗑️ Eliminar</button>`;
   document.getElementById('modal').style.display='flex';
