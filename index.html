@@ -439,7 +439,7 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
       <div class="card-body" id="conf-body"></div>
     </div>
     <div id="email-btn-row" class="btn-row" style="padding:0 4px;margin-bottom:8px;display:none">
-      <button class="btn btn-s" style="width:100%" onclick="sendEmailCliente()">✉️ Enviar email al cliente con resumen y SEPA</button>
+      <button class="btn btn-s" style="width:100%" onclick="sendEmailCliente(this)">✉️ Enviar email al cliente con resumen y SEPA</button>
     </div>
     <div class="btn-row jb" style="padding:0 4px">
       <button class="btn btn-g" onclick="goStep(3)">← Atrás</button>
@@ -860,7 +860,7 @@ function renderConf(){
 // ══════════════════════════════════════════
 // SEND EMAIL TO CLIENT
 // ══════════════════════════════════════════
-async function sendEmailCliente(){
+async function sendEmailCliente(btn){
   const cfg=await getCfg();
   const whEmail=cfg.whEmail||DEFAULT_WH_EMAIL||'';
   if(!whEmail){toast('Webhook de email no configurado en Ajustes','err');return;}
@@ -885,7 +885,6 @@ async function sendEmailCliente(){
     resumen,
     fecha:new Date().toLocaleDateString('es-ES')
   };
-  const btn=event.currentTarget;
   btn.disabled=true;btn.textContent='Enviando…';
   try{
     const r=await fetch(whEmail,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
