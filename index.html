@@ -438,9 +438,6 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
       <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">✅</div><div class="card-ttl">Resumen y confirmación</div></div></div>
       <div class="card-body" id="conf-body"></div>
     </div>
-    <div id="email-btn-row" class="btn-row" style="padding:0 4px;margin-bottom:8px;display:none">
-      <button class="btn btn-s" style="width:100%" onclick="sendEmailCliente(this)">✉️ Enviar email al cliente con resumen y SEPA</button>
-    </div>
     <div class="btn-row jb" style="padding:0 4px">
       <button class="btn btn-g" onclick="goStep(3)">← Atrás</button>
       <div class="btn-row">
@@ -840,9 +837,6 @@ function renderConf(){
     <div class="srow"><span class="slbl">Pago</span><span class="sval">${ta.pago}</span></div></div>`;}
   const cats=TIPO==='navidad'?CN:CA;
   const actv=Object.entries(CATS).filter(([k,vv])=>vv.on);
-  const emlVal=document.getElementById('c-eml').value.trim();
-  const emailBtn=document.getElementById('email-btn-row');
-  if(emailBtn)emailBtn.style.display=emlVal?'flex':'none';
   document.getElementById('conf-body').innerHTML=`
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
       <div><div class="sec-ttl">Cliente</div><div style="font-weight:700;font-size:15px">${far}</div>
@@ -894,6 +888,30 @@ async function sendEmailCliente(btn){
     toast('Error al enviar email: '+e.message,'err');
     btn.disabled=false;btn.textContent='✉️ Enviar email al cliente con resumen y SEPA';
   }
+}
+
+// ══════════════════════════════════════════
+// AUTO SEND EMAIL ON CONFIRM
+// ══════════════════════════════════════════
+async function autoSendEmailCliente(p){
+  const cfg=await getCfg();
+  const whEmail=cfg.whEmail||DEFAULT_WH_EMAIL||'';
+  if(!whEmail)return;
+  const eml=p.cli?.eml||'';
+  if(!eml)return;
+  let resumen='';
+  if(p.tipo==='navidad'&&p.nav){
+    const n=p.nav;
+    resumen=`Promoción: Navidad Infarma 2026\nTramo: ${n.tramo?.toLocaleString('es-ES')} uds\nPrecio/ud: ${n.prc?.toFixed(2).replace('.',',')} €\nImporte: ${n.imp?.toFixed(2).replace('.',',')} €${n.bonus>0?'\nUds sin cargo: +'+n.bonus:''}\nForma de pago: 60 días desde el envío`;
+  } else if(p.nue){
+    const n=p.nue;
+    resumen=`Promoción: Nuevas Aperturas · Tarifa ${n.tier}\nPVL pedido: ${n.pvl?.toFixed(2).replace('.',',')} €\nDescuento: ${(n.dto*100)}%\nPVL neto: ${n.net?.toFixed(2).replace('.',',')} €\nForma de pago: ${n.pago}`;
+  }
+  const payload={email_cliente:eml,farmacia:p.cli.far,comercial:p.com,tipo:p.tipo,resumen,fecha:p.fecha};
+  try{
+    const r=await fetch(whEmail,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(r.ok) toast('✉️ Email con SEPA enviado a '+eml,'ok');
+  }catch(e){ console.warn('Auto email error:',e); }
 }
 
 // ══════════════════════════════════════════
@@ -954,6 +972,7 @@ async function savePed(estado){
   PEDS=await dbAll('peds');
   updBadge();
   toast(estado==='confirmado'?'✅ Pedido guardado localmente':'💾 Borrador guardado','ok');
+  if(estado==='confirmado' && ped.cli?.eml) autoSendEmailCliente(ped);
   resetF();
   if(btn)btn.disabled=false;
   setTimeout(()=>{showView('dashboard',document.getElementById('tab-dashboard'));syncAll(true);},800);
