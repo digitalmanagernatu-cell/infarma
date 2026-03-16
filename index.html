@@ -816,12 +816,12 @@ function renderConf(){
     <div class="srow"><span class="slbl">Importe</span><span class="sval hi">${(TRAMO*tf.p).toFixed(2).replace('.',',')} €</span></div>
     ${tf.b>0?`<div class="srow"><span class="slbl">Uds sin cargo</span><span class="sval bon">+${tf.b}</span></div>`:''}
     <div class="srow"><span class="slbl">Pago</span><span class="sval">60 días desde el envío</span></div></div>`;}
-  else{const ta=TA[TIER],pvl=parseFloat(v('na-pvl'))||0;promo=`<div class="sbox">
-    <div class="srow"><span class="slbl">Promoción</span><span class="sval">🏪 Nuevas Aperturas · Tarifa ${TIER}</span></div>
-    <div class="srow"><span class="slbl">PVL pedido</span><span class="sval" style="font-weight:800">${pvl.toFixed(2).replace('.',',')} €</span></div>
-    <div class="srow"><span class="slbl">Descuento</span><span class="sval bon">${ta.d*100}%</span></div>
-    <div class="srow"><span class="slbl">PVL neto</span><span class="sval hi">${(pvl*(1-ta.d)).toFixed(2).replace('.',',')} €</span></div>
-    <div class="srow"><span class="slbl">Pago</span><span class="sval">${ta.pago}</span></div></div>`;}
+  else{const ta=TA[TIER];promo=`<div class="sbox">
+    <div class="srow"><span class="slbl">Promoción</span><span class="sval" style="font-weight:800">🏪 Nuevas Aperturas · Tarifa ${TIER}</span></div>
+    <div class="srow"><span class="slbl">Mínimo de pedido</span><span class="sval">${ta.min.toLocaleString('es-ES')} € PVL</span></div>
+    <div class="srow"><span class="slbl">Descuento directo</span><span class="sval bon">${ta.d*100}%</span></div>
+    <div class="srow"><span class="slbl">Reposición</span><span class="sval bon">${ta.rep}</span></div>
+    <div class="srow"><span class="slbl">Forma de pago</span><span class="sval">${ta.pago}</span></div></div>`;}
   const cats=TIPO==='navidad'?CN:CA;
   const actv=Object.entries(CATS).filter(([k,vv])=>vv.on);
   document.getElementById('conf-body').innerHTML=`
@@ -892,7 +892,7 @@ async function autoSendEmailCliente(p){
     resumen=`Promoción: Navidad Infarma 2026\nTramo: ${n.tramo?.toLocaleString('es-ES')} uds\nPrecio/ud: ${n.prc?.toFixed(2).replace('.',',')} €\nImporte: ${n.imp?.toFixed(2).replace('.',',')} €${n.bonus>0?'\nUds sin cargo: +'+n.bonus:''}\nForma de pago: 60 días desde el envío`;
   } else if(p.nue){
     const n=p.nue;
-    resumen=`Promoción: Nuevas Aperturas · Tarifa ${n.tier}\nPVL pedido: ${n.pvl?.toFixed(2).replace('.',',')} €\nDescuento: ${(n.dto*100)}%\nPVL neto: ${n.net?.toFixed(2).replace('.',',')} €\nForma de pago: ${n.pago}`;
+    resumen=`Promoción: Nuevas Aperturas · Tarifa ${n.tier}\nMínimo de pedido: ${n.min?.toLocaleString('es-ES')} € PVL\nDescuento directo: ${(n.dto*100)}%\nReposición: ${n.rep}\nForma de pago: ${n.pago}`;
   }
   const payload={email_cliente:eml,farmacia:p.cli.far,comercial:p.com,tipo:p.tipo,resumen,fecha:p.fecha};
   try{
@@ -918,7 +918,7 @@ async function sendEmailDesdeModal(id, btn){
     resumen=`Promoción: Navidad Infarma 2026\nTramo: ${n.tramo?.toLocaleString('es-ES')} uds\nPrecio/ud: ${n.prc?.toFixed(2).replace('.',',')} €\nImporte: ${n.imp?.toFixed(2).replace('.',',')} €${n.bonus>0?'\nUds sin cargo: +'+n.bonus:''}\nForma de pago: 60 días desde el envío`;
   } else if(p.nue){
     const n=p.nue;
-    resumen=`Promoción: Nuevas Aperturas · Tarifa ${n.tier}\nPVL pedido: ${n.pvl?.toFixed(2).replace('.',',')} €\nDescuento: ${(n.dto*100)}%\nPVL neto: ${n.net?.toFixed(2).replace('.',',')} €\nForma de pago: ${n.pago}`;
+    resumen=`Promoción: Nuevas Aperturas · Tarifa ${n.tier}\nMínimo de pedido: ${n.min?.toLocaleString('es-ES')} € PVL\nDescuento directo: ${(n.dto*100)}%\nReposición: ${n.rep}\nForma de pago: ${n.pago}`;
   }
   const payload={
     email_cliente:eml,
