@@ -345,7 +345,7 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
           <div class="fgrp"><label>Provincia / Ciudad</label><input type="text" id="c-prv" placeholder="Madrid"></div>
           <div class="fgrp"><label>Contacto</label><input type="text" id="c-cto" placeholder="Nombre responsable"></div>
           <div class="fgrp"><label>Teléfono</label><input type="text" id="c-tel" placeholder="+34 600 000 000"></div>
-          <div class="fgrp full"><label>Email cliente</label><input type="email" id="c-eml" placeholder="farmacia@ejemplo.com"></div>
+          <div class="fgrp full"><label>Email cliente *</label><input type="email" id="c-eml" placeholder="farmacia@ejemplo.com"></div>
         </div>
       </div>
     </div>
@@ -438,6 +438,9 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
       <div class="card-hdr"><div class="card-hdr-l"><div class="card-ico">✅</div><div class="card-ttl">Resumen y confirmación</div></div></div>
       <div class="card-body" id="conf-body"></div>
     </div>
+    <div id="email-btn-row" class="btn-row" style="padding:0 4px;margin-bottom:8px;display:none">
+      <button class="btn btn-s" style="width:100%" onclick="sendEmailCliente()">✉️ Enviar email al cliente con resumen y SEPA</button>
+    </div>
     <div class="btn-row jb" style="padding:0 4px">
       <button class="btn btn-g" onclick="goStep(3)">← Atrás</button>
       <div class="btn-row">
@@ -506,6 +509,7 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
         <div class="fgrp full"><label>Webhook POST (guardar pedido)</label><input type="text" id="wh-post"></div>
         <div class="fgrp full"><label>Webhook GET (obtener pedidos)</label><input type="text" id="wh-get"></div>
         <div class="fgrp full"><label>Email notificaciones</label><input type="email" id="notif-eml"></div>
+        <div class="fgrp full"><label>Webhook EMAIL cliente (envío SEPA)</label><input type="text" id="wh-email" placeholder="https://natulab.app.n8n.cloud/webhook/betres-email"></div>
       </div>
       <div class="btn-row mt8">
         <button class="btn btn-p btn-sm" onclick="saveCfg()">Guardar</button>
@@ -727,6 +731,7 @@ function goStep(n){
   if(n>1&&!TIPO){toast('Selecciona un tipo de promoción','err');return;}
   if(n>1&&!com){toast('Selecciona un comercial','err');return;}
   if(n>2&&!far){toast('Introduce el nombre de la farmacia','err');return;}
+  if(n>2){const eml=document.getElementById('c-eml').value.trim();if(!eml||!/^[^@]+@[^@]+\.[^@]+$/.test(eml)){toast('Introduce un email de cliente válido','err');return;}}
   if(n>3&&TIPO==='navidad'&&!TRAMO){toast('Selecciona un tramo','err');return;}
   if(n>3&&TIPO==='nuevas'&&!TIER){toast('Selecciona una promoción M/L/XL','err');return;}
   if(n>3&&TIPO==='nuevas'){
@@ -835,6 +840,9 @@ function renderConf(){
     <div class="srow"><span class="slbl">Pago</span><span class="sval">${ta.pago}</span></div></div>`;}
   const cats=TIPO==='navidad'?CN:CA;
   const actv=Object.entries(CATS).filter(([k,vv])=>vv.on);
+  const emlVal=document.getElementById('c-eml').value.trim();
+  const emailBtn=document.getElementById('email-btn-row');
+  if(emailBtn)emailBtn.style.display=emlVal?'flex':'none';
   document.getElementById('conf-body').innerHTML=`
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
       <div><div class="sec-ttl">Cliente</div><div style="font-weight:700;font-size:15px">${far}</div>
@@ -847,6 +855,46 @@ function renderConf(){
     <div style="background:var(--blue-bg);border-radius:8px;padding:10px">
       ${actv.map(([id,vv])=>{const c=cats.find(x=>x.id===id);return`<div style="font-size:12px;padding:2px 0">✓ <b>${c?.lbl}</b>${vv.obs?' · <span style="color:var(--mid)">'+vv.obs+'</span>':''}</div>`;}).join('')}
     </div>`:''}`;
+}
+
+// ══════════════════════════════════════════
+// SEND EMAIL TO CLIENT
+// ══════════════════════════════════════════
+async function sendEmailCliente(){
+  const cfg=await getCfg();
+  const whEmail=cfg.whEmail||'';
+  if(!whEmail){toast('Webhook de email no configurado en Ajustes','err');return;}
+  const eml=document.getElementById('c-eml').value.trim();
+  if(!eml){toast('El email del cliente es obligatorio','err');return;}
+  const far=document.getElementById('c-far').value.trim();
+  const com=document.getElementById('sel-com').value;
+  // Build summary text
+  let resumen='';
+  if(TIPO==='navidad'){
+    const tf=TN.find(x=>x.u===TRAMO);
+    resumen=`Promoción: Navidad Infarma 2026\nTramo: ${TRAMO?.toLocaleString('es-ES')} uds\nPrecio/ud: ${tf?.p.toFixed(2).replace('.',',')} €\nImporte: ${(TRAMO*tf.p).toFixed(2).replace('.',',')} €${tf.b>0?'\nUds sin cargo: +'+tf.b:''}\nForma de pago: 60 días desde el envío`;
+  } else {
+    const ta=TA[TIER],pvl=parseFloat(document.getElementById('na-pvl').value)||0;
+    resumen=`Promoción: Nuevas Aperturas · Tarifa ${TIER}\nPVL pedido: ${pvl.toFixed(2).replace('.',',')} €\nDescuento: ${ta.d*100}%\nPVL neto: ${(pvl*(1-ta.d)).toFixed(2).replace('.',',')} €\nForma de pago: ${ta.pago}`;
+  }
+  const payload={
+    email_cliente:eml,
+    farmacia:far,
+    comercial:com,
+    tipo:TIPO,
+    resumen,
+    fecha:new Date().toLocaleDateString('es-ES')
+  };
+  const btn=event.currentTarget;
+  btn.disabled=true;btn.textContent='Enviando…';
+  try{
+    const r=await fetch(whEmail,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(r.ok){toast('✉️ Email enviado a '+eml,'ok');btn.textContent='✉️ Email enviado ✓';btn.classList.add('btn-p');}
+    else throw new Error('HTTP '+r.status);
+  }catch(e){
+    toast('Error al enviar email: '+e.message,'err');
+    btn.disabled=false;btn.textContent='✉️ Enviar email al cliente con resumen y SEPA';
+  }
 }
 
 // ══════════════════════════════════════════
@@ -1117,6 +1165,7 @@ async function init(){
   if(document.getElementById('wh-post'))document.getElementById('wh-post').value=cfg.whPost;
   if(document.getElementById('wh-get'))document.getElementById('wh-get').value=cfg.whGet;
   if(document.getElementById('notif-eml'))document.getElementById('notif-eml').value=cfg.notifEml;
+  if(document.getElementById('wh-email'))document.getElementById('wh-email').value=cfg.whEmail||'';
 
   populateComs(cfg.coms);
   const ls=await dbGet('cfg','lastSync');
