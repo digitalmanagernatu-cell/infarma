@@ -1098,7 +1098,7 @@ async function openP(id){
     ${n.bonus>0?`<div class="srow"><span class="slbl">Uds sin cargo</span><span class="sval bon">+${n.bonus}</span></div>`:''}
     <div class="srow"><span class="slbl">Entrega</span><span class="sval">${n.ent==='tras_feria'?'Tras feria':'Programada'}</span></div>
     ${n.fenv?`<div class="srow"><span class="slbl">Fecha envío</span><span class="sval">${n.fenv}</span></div>`:''}
-    <div class="srow"><span class="slbl">Forma de pago</span><span class="sval">${u>=1008?'60 días F.F.':u>=504?'45 días':'60 días desde el envío'}</span></div></div>`;}
+    <div class="srow"><span class="slbl">Forma de pago</span><span class="sval">${n.tramo>=1008?'60 días F.F.':n.tramo>=504?'45 días':'60 días desde el envío'}</span></div></div>`;}
   else if(p.nue){const n=p.nue;det=`<div class="sbox">
     <div class="srow"><span class="slbl">Tarifa</span><span class="sval" style="font-weight:800">${n.tier}</span></div>
     <div class="srow"><span class="slbl">PVL pedido</span><span class="sval">${n.pvl?.toFixed(2).replace('.',',')} €</span></div>
