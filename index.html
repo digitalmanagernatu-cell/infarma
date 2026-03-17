@@ -915,10 +915,12 @@ function buildEmailPayload(p){
   }
   const tier = p.nue?.tier || null;
   const tramo = p.nav?.tramo || null;
+  const email_comercial = getComEmail(p.com);
   return {
     email_cliente:p.cli.eml,
     farmacia:p.cli.far,
     comercial:p.com,
+    email_comercial,
     tipo:p.tipo,
     resumen,
     conds,
@@ -1219,6 +1221,27 @@ const DEFAULT_WH_POST = 'https://natulab.app.n8n.cloud/webhook/betres-pedido';
 const DEFAULT_WH_GET  = 'https://natulab.app.n8n.cloud/webhook/betres-pedidos';
 const DEFAULT_EMAIL   = 'digitalmanager@natuaromatic.com';
 const DEFAULT_WH_EMAIL = 'https://natulab.app.n8n.cloud/webhook/betres-email';
+const COM_EMAILS = {
+  'FAR001': 'betreson-cataluna@natuaromatic.com',
+  'FAR002': 'arrife.david@natuaromatic.com',
+  'FAR003': 'huertas.francisco@natuaromatic.com',
+  'FAR004': 'mouchati.gorget@natuaromatic.com',
+  'FAR005': 'ojeda.jose@natuaromatic.com',
+  'FAR006': 'villajos.juan@natuaromatic.com',
+  'FAR007': 'navarro.lourdes@natuaromatic.com',
+  'FAR008': 'betreson-galicia@natuaromatic.com',
+  'FAR009': 'vivas.yolanda@natuaromatic.com',
+  'FAR012': 'pedidosbetreson@natuaromatic.com',
+  'FAR013': 'ortega.pedro@natuaromatic.com',
+  'FAR019': 'belenguer.ramon@natuaromatic.com'
+};
+
+function getComEmail(com){
+  if(!com) return '';
+  const code = com.match(/FAR\d+/)?.[0] || '';
+  return COM_EMAILS[code] || '';
+}
+
 const DEFAULT_COMS    = [
   'FAR001. GREGORIO',
   'FAR002. DAVID ARRIFE',
