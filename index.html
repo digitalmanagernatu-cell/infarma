@@ -900,6 +900,8 @@ function buildEmailPayload(p){
       ...conds
     ].join('\n');
   }
+  const tier = p.nue?.tier || null;
+  const tramo = p.nav?.tramo || null;
   return {
     email_cliente:p.cli.eml,
     farmacia:p.cli.far,
@@ -907,7 +909,9 @@ function buildEmailPayload(p){
     tipo:p.tipo,
     resumen,
     conds,
-    fecha:p.fecha
+    fecha:p.fecha,
+    tier,
+    tramo
   };
 }
 
