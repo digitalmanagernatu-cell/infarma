@@ -392,9 +392,9 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
       <div class="card-body">
         <div class="sec-ttl">Selecciona promoción</div>
         <div class="tier-grid">
-          <div class="tcard" onclick="selTier('M',this)"><div class="tl">M</div><div class="tmin">Mín. 600 € PVL</div><div class="tdto">5% descuento</div><div class="tpago">Pago 60 días</div></div>
-          <div class="tcard" onclick="selTier('L',this)"><div class="tl">L</div><div class="tmin">Mín. 1.000 € PVL</div><div class="tdto">8% descuento</div><div class="tpago">Pago 30-60 días</div></div>
-          <div class="tcard" onclick="selTier('XL',this)"><div class="tl">XL</div><div class="tmin">Mín. 1.500 € PVL</div><div class="tdto">10% descuento</div><div class="tpago">Pago 30-60-85 días</div></div>
+          <div class="tcard" onclick="selTier('M',this)"><div class="tl">M</div><div class="tmin">Mín. 600 € PVL</div><div class="tdto">3% descuento</div><div class="tpago">Pago 60 días F.F.</div></div>
+          <div class="tcard" onclick="selTier('L',this)"><div class="tl">L</div><div class="tmin">Mín. 1.000 € PVL</div><div class="tdto">5% descuento</div><div class="tpago">Pago 30-60 días</div></div>
+          <div class="tcard" onclick="selTier('XL',this)"><div class="tl">XL</div><div class="tmin">Mín. 1.500 € PVL</div><div class="tdto">8% descuento</div><div class="tpago">Pago 30-60-85 días</div></div>
         </div>
         <div id="na-pvl-sec" style="display:none;margin-top:16px">
           <div class="fg">
@@ -547,9 +547,9 @@ let isSyncing=false,lastSync=null;
 
 const TN=[{u:18,p:1.17,b:0},{u:126,p:1.14,b:0},{u:252,p:1.10,b:0},{u:504,p:1.05,b:40},{u:1008,p:0.98,b:0}];
 const TA={
-  M:{min:600,d:.05,pago:'60 días',rep:'5% durante 60 días',conds:['5% descuento directo sobre el pedido','5% en reposición durante 60 días','Testers incluidos en perfumes 100ml (1 c/ 2 cajas misma ref.)','Geles máx. 20% del pedido (hasta 120 € PVL)','Pago a 60 días','Requisito: mín. 50% en perfumería 100ml, Oriental o ambientación']},
-  L:{min:1000,d:.08,pago:'30-60 días',rep:'8% durante 90 días',conds:['8% descuento directo sobre el pedido','8% en reposición durante 90 días','Expositores sobremesa incluidos','2 cajas de 30ml sin cargo','Geles máx. 15% del pedido (hasta 150 € PVL)','Pago 30-60 días','Requisito: mín. 50% en perfumería 100ml u Oriental']},
-  XL:{min:1500,d:.10,pago:'30-60-85 días',rep:'10% durante 90 días',conds:['10% descuento directo sobre el pedido','10% en reposición durante 90 días','3% rappel anual si supera 6.000 €','Geles máx. 10% del pedido (hasta 150 € PVL)','Pago 30-60-85 días','Requisito: mín. 60% en perfumería 100ml, Oriental o ambientación']}
+  M:{min:600,d:.03,pago:'60 días F.F.',rep:'5% durante 30 días F.F.',conds:['3% descuento directo sobre el pedido','5% en reposición durante 30 días F.F.','Pago a 60 días F.F.','Requisito: mín. 50% en perfumería 100ml, colección mascotas, perfumería oriental y ambientación','Promoción no acumulable con otros descuentos activos']},
+  L:{min:1000,d:.05,pago:'30-60 días',rep:'8% durante 40 días F.F.',conds:['5% descuento directo sobre el pedido','8% en reposición durante 40 días F.F.','2 cajas de 30ml sin cargo','Geles máx. 15% del pedido (hasta 150 € PVL)','Pago 30-60 días','Requisito: mín. 50% en perfumería 100ml, colección mascotas, perfumería oriental y ambientación','Promoción no acumulable con otros descuentos activos']},
+  XL:{min:1500,d:.08,pago:'30-60-85 días',rep:'8% durante 60 días F.F.',conds:['8% descuento directo sobre el pedido','8% en reposición durante 60 días F.F.','3% rappel anual si supera 6.000 €','Geles máx. 10% del pedido (hasta 150 € PVL)','Pago 30-60-85 días','Requisito: mín. 60% en perfumería 100ml, colección mascotas, perfumería oriental y ambientación','Promoción no acumulable con otros descuentos activos']}
 };
 const CN=[{id:'per100',lbl:'Perfumería Betrés ON 100 ml'},{id:'oriental',lbl:'Colección Oriental'},{id:'mikado',lbl:'Colección Mikado Esencial'},{id:'bodymist',lbl:'Body Mist'},{id:'mascotas',lbl:'Categoría Mascotas'},{id:'packduo',lbl:'Pack Duo (+3 cajas completas)'}];
 const CA=[{id:'per100',lbl:'Perfumería Betrés ON 100 ml'},{id:'oriental',lbl:'Colección Oriental'},{id:'ambient',lbl:'Ambientación'},{id:'geles',lbl:'Geles'},{id:'per30',lbl:'Perfumería 30 ml'},{id:'expositor',lbl:'Expositor / Material PLV'}];
@@ -767,9 +767,10 @@ function selTramo(u,el){
   if(bon){document.getElementById('s-bon').textContent='+'+tf.b+' uds';document.getElementById('s-tot').textContent=(u+tf.b).toLocaleString('es-ES')+' uds';}
   document.getElementById('nav-sum').style.display='block';
   let c='';
-  if(u===1008)c='• 5% descuento implantación Colección Oriental<br>• 5% descuento 8 cajas completas Perfumería 100 ml<br>• 5% descuento implantación Colección Mikado Esencial<br>• 5% descuento implantación Body Mist<br>• 5% descuento implantación Categoría Mascotas<br>• 5% descuento Pack Duo (+3 cajas completas)';
-  else if(u===504)c='• 40 unidades sin cargo (8% producto adicional)<br>• 5% adicional en reposición antes del 31 de octubre';
-  else c='• Tarifa escalada de referencia<br>• Sin condiciones promocionales adicionales específicas de Infarma';
+  if(u===1008)c='• Condiciones aplicables 30 días desde la fecha de factura<br>• Forma de pago: 60 días F.F.<br>• Promoción no acumulable con otros descuentos activos';
+  else if(u===504)c='• 40 unidades sin cargo (8% producto adicional)<br>• 5% en reposición hasta el 15 de noviembre<br>• Forma de pago: 45 días<br>• Promoción no acumulable con otros descuentos activos';
+  else if(u===252)c='• Tarifa escalada de referencia<br>• Promoción no acumulable con otros descuentos activos';
+  else c='• Promoción no acumulable con otros descuentos activos';
   document.getElementById('cnd-txt').innerHTML=c;
   document.getElementById('nav-cnd').style.display='block';
 }
@@ -883,11 +884,16 @@ function buildEmailPayload(p){
       `Precio por unidad: ${n.prc?.toFixed(2).replace('.',',')} €`,
       `Importe total: ${n.imp?.toFixed(2).replace('.',',')} €`,
       ...(n.bonus>0?[`Unidades sin cargo adicionales: +${n.bonus} uds`]:[]),
-      ...(n.tramo>=1008?['5% de descuento adicional en todas las categorías del pedido']:
-          n.tramo>=504?['Descuento especial de categoría incluido']:[]),
-      `Forma de pago: 60 días desde el envío`,
+      ...(n.tramo>=1008?[
+        'Condiciones aplicables 30 días desde la fecha de factura',
+        'Forma de pago: 60 días F.F.'
+      ]:n.tramo>=504?[
+        '5% en reposición hasta el 15 de noviembre',
+        'Forma de pago: 45 días'
+      ]:[`Forma de pago: 60 días desde el envío`]),
       `Entrega: ${n.ent==='tras_feria'?'Tras la feria':'Programada'}`,
-      ...(n.fenv?[`Fecha de envío prevista: ${n.fenv}`]:[])
+      ...(n.fenv?[`Fecha de envío prevista: ${n.fenv}`]:[]),
+      'Promoción no acumulable con otros descuentos activos'
     ];
     resumen=condNav.join('\n');
     conds=condNav;
