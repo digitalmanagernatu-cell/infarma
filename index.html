@@ -371,7 +371,7 @@ hr{border:none;border-top:1px solid var(--border);margin:16px 0}
           <div class="srow" id="sr-tot" style="display:none"><span class="slbl">Total uds entregadas</span><span class="sval" id="s-tot">—</span></div>
           <div class="srow"><span class="slbl">Precio / unidad</span><span class="sval" id="s-prc">—</span></div>
           <div class="srow"><span class="slbl">Importe pedido</span><span class="sval hi" id="s-imp">—</span></div>
-          <div class="srow"><span class="slbl">Forma de pago</span><span class="sval">60 días desde el envío</span></div>
+          <div class="srow" id="sr-pago"><span class="slbl">Forma de pago</span><span class="sval" id="s-pago">60 días desde el envío</span></div>
         </div>
         <div id="nav-cnd" class="cbox" style="display:none"><div class="cbox-ttl">Condiciones aplicables</div><div class="cbox-body" id="cnd-txt"></div></div>
         <hr>
@@ -766,6 +766,7 @@ function selTramo(u,el){
   document.getElementById('sr-tot').style.display=bon?'flex':'none';
   if(bon){document.getElementById('s-bon').textContent='+'+tf.b+' uds';document.getElementById('s-tot').textContent=(u+tf.b).toLocaleString('es-ES')+' uds';}
   document.getElementById('nav-sum').style.display='block';
+  document.getElementById('s-pago').textContent=u>=1008?'60 días F.F.':u>=504?'45 días':'60 días desde el envío';
   let c='';
   if(u===1008)c='• Condiciones aplicables 30 días desde la fecha de factura<br>• Forma de pago: 60 días F.F.<br>• Promoción no acumulable con otros descuentos activos';
   else if(u===504)c='• 40 unidades sin cargo (8% producto adicional)<br>• 5% en reposición hasta el 15 de noviembre<br>• Forma de pago: 45 días<br>• Promoción no acumulable con otros descuentos activos';
@@ -1076,7 +1077,7 @@ async function openP(id){
     ${n.bonus>0?`<div class="srow"><span class="slbl">Uds sin cargo</span><span class="sval bon">+${n.bonus}</span></div>`:''}
     <div class="srow"><span class="slbl">Entrega</span><span class="sval">${n.ent==='tras_feria'?'Tras feria':'Programada'}</span></div>
     ${n.fenv?`<div class="srow"><span class="slbl">Fecha envío</span><span class="sval">${n.fenv}</span></div>`:''}
-    <div class="srow"><span class="slbl">Forma de pago</span><span class="sval">60 días desde el envío</span></div></div>`;}
+    <div class="srow"><span class="slbl">Forma de pago</span><span class="sval">${u>=1008?'60 días F.F.':u>=504?'45 días':'60 días desde el envío'}</span></div></div>`;}
   else if(p.nue){const n=p.nue;det=`<div class="sbox">
     <div class="srow"><span class="slbl">Tarifa</span><span class="sval" style="font-weight:800">${n.tier}</span></div>
     <div class="srow"><span class="slbl">PVL pedido</span><span class="sval">${n.pvl?.toFixed(2).replace('.',',')} €</span></div>
