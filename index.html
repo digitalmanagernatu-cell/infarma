@@ -840,6 +840,17 @@ function renderConf(){
     <div style="background:var(--blue-bg);border-radius:8px;padding:10px">
       ${actv.map(([id,vv])=>{const c=cats.find(x=>x.id===id);return`<div style="font-size:12px;padding:2px 0">✓ <b>${c?.lbl}</b>${vv.obs?' · <span style="color:var(--mid)">'+vv.obs+'</span>':''}</div>`;}).join('')}
     </div>`:''}`;
+
+  // CC comercial section
+  const comEml2 = getComEmail(document.getElementById('sel-com')?.value||'');
+  const selComLabel = document.getElementById('sel-com')?.value||'';
+  if(comEml2){
+    const ccDiv=document.createElement('div');
+    ccDiv.style.cssText='margin-top:16px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:13px 16px;display:flex;align-items:center;gap:10px';
+    ccDiv.innerHTML='<input type="checkbox" id="chk-cc" checked style="width:16px;height:16px;accent-color:var(--blue);cursor:pointer;flex-shrink:0"><label for="chk-cc" style="font-size:13px;color:#166534;cursor:pointer;line-height:1.5"><strong>Enviar copia al comercial de zona</strong><br><span style="font-size:11px;color:#15803D">'+selComLabel+' · '+comEml2+'</span></label>';
+    document.getElementById('conf-body').appendChild(ccDiv);
+  }
+
 }
 
 // ══════════════════════════════════════════
@@ -936,7 +947,9 @@ async function autoSendEmailCliente(p){
   if(!whEmail)return;
   const eml=p.cli?.eml||'';
   if(!eml)return;
-  const payload=buildEmailPayload(p);
+  const chkCC = document.getElementById('chk-cc');
+  const inclCC = !chkCC || chkCC.checked;
+  const payload = {...buildEmailPayload(p), include_cc: inclCC};
   try{
     const r=await fetch(whEmail,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     if(r.ok) toast('✉️ Email con SEPA enviado a '+eml,'ok');
