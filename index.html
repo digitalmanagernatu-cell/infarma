@@ -851,23 +851,15 @@ async function sendEmailCliente(btn){
   if(!eml){toast('El email del cliente es obligatorio','err');return;}
   const far=document.getElementById('c-far').value.trim();
   const com=document.getElementById('sel-com').value;
-  // Build summary text
-  let resumen='';
-  if(TIPO==='navidad'){
-    const tf=TN.find(x=>x.u===TRAMO);
-    resumen=`Promoción: Navidad Infarma 2026\nTramo: ${TRAMO?.toLocaleString('es-ES')} uds\nPrecio/ud: ${tf?.p.toFixed(2).replace('.',',')} €\nImporte: ${(TRAMO*tf.p).toFixed(2).replace('.',',')} €${tf.b>0?'\nUds sin cargo: +'+tf.b:''}\nForma de pago: 60 días desde el envío`;
-  } else {
-    const ta=TA[TIER],pvl=parseFloat(document.getElementById('na-pvl').value)||0;
-    resumen=`Promoción: Nuevas Aperturas · Tarifa ${TIER}\nPVL pedido: ${pvl.toFixed(2).replace('.',',')} €\nDescuento: ${ta.d*100}%\nPVL neto: ${(pvl*(1-ta.d)).toFixed(2).replace('.',',')} €\nForma de pago: ${ta.pago}`;
-  }
-  const payload={
-    email_cliente:eml,
-    farmacia:far,
-    comercial:com,
-    tipo:TIPO,
-    resumen,
-    fecha:new Date().toLocaleDateString('es-ES')
+  // Build payload from current form state as temp object
+  const tf=TN.find(x=>x.u===TRAMO)||{};
+  const tempP={
+    tipo:TIPO, com, cli:{eml,far},
+    fecha:new Date().toLocaleDateString('es-ES'),
+    nav:TIPO==='navidad'?{tramo:TRAMO,prc:tf.p,bonus:tf.b,imp:TRAMO*(tf.p||0),ent:document.getElementById('nav-ent')?.value||'',fenv:document.getElementById('nav-fenv')?.value||''}:null,
+    nue:TIPO==='nuevas'?{tier:TIER,min:TA[TIER]?.min,dto:TA[TIER]?.d,rep:TA[TIER]?.rep,pago:TA[TIER]?.pago}:null
   };
+  const payload=buildEmailPayload(tempP);
   btn.disabled=true;btn.textContent='Enviando…';
   try{
     const r=await fetch(whEmail,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
@@ -882,21 +874,50 @@ async function sendEmailCliente(btn){
 // ══════════════════════════════════════════
 // AUTO SEND EMAIL ON CONFIRM
 // ══════════════════════════════════════════
+function buildEmailPayload(p){
+  let resumen='', conds=[];
+  if(p.tipo==='navidad'&&p.nav){
+    const n=p.nav;
+    const condNav=[
+      `Tramo: ${n.tramo?.toLocaleString('es-ES')} uds facturadas`,
+      `Precio por unidad: ${n.prc?.toFixed(2).replace('.',',')} €`,
+      `Importe total: ${n.imp?.toFixed(2).replace('.',',')} €`,
+      ...(n.bonus>0?[`Unidades sin cargo adicionales: +${n.bonus} uds`]:[]),
+      ...(n.tramo>=1008?['5% de descuento adicional en todas las categorías del pedido']:
+          n.tramo>=504?['Descuento especial de categoría incluido']:[]),
+      `Forma de pago: 60 días desde el envío`,
+      `Entrega: ${n.ent==='tras_feria'?'Tras la feria':'Programada'}`,
+      ...(n.fenv?[`Fecha de envío prevista: ${n.fenv}`]:[])
+    ];
+    resumen=condNav.join('\n');
+    conds=condNav;
+  } else if(p.nue){
+    const n=p.nue, ta=TA[n.tier]||{};
+    conds=ta.conds||[];
+    resumen=[
+      `Tarifa: Nuevas Aperturas ${n.tier}`,
+      `Mínimo de pedido: ${(n.min||ta.min||0).toLocaleString('es-ES')} € PVL`,
+      ...conds
+    ].join('\n');
+  }
+  return {
+    email_cliente:p.cli.eml,
+    farmacia:p.cli.far,
+    comercial:p.com,
+    tipo:p.tipo,
+    resumen,
+    conds,
+    fecha:p.fecha
+  };
+}
+
 async function autoSendEmailCliente(p){
   const cfg=await getCfg();
   const whEmail=cfg.whEmail||DEFAULT_WH_EMAIL||'';
   if(!whEmail)return;
   const eml=p.cli?.eml||'';
   if(!eml)return;
-  let resumen='';
-  if(p.tipo==='navidad'&&p.nav){
-    const n=p.nav;
-    resumen=`Promoción: Navidad Infarma 2026\nTramo: ${n.tramo?.toLocaleString('es-ES')} uds\nPrecio/ud: ${n.prc?.toFixed(2).replace('.',',')} €\nImporte: ${n.imp?.toFixed(2).replace('.',',')} €${n.bonus>0?'\nUds sin cargo: +'+n.bonus:''}\nForma de pago: 60 días desde el envío`;
-  } else if(p.nue){
-    const n=p.nue;
-    resumen=`Promoción: Nuevas Aperturas · Tarifa ${n.tier}\nMínimo de pedido: ${n.min?.toLocaleString('es-ES')} € PVL\nDescuento directo: ${(n.dto*100)}%\nReposición: ${n.rep}\nForma de pago: ${n.pago}`;
-  }
-  const payload={email_cliente:eml,farmacia:p.cli.far,comercial:p.com,tipo:p.tipo,resumen,fecha:p.fecha};
+  const payload=buildEmailPayload(p);
   try{
     const r=await fetch(whEmail,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     if(r.ok) toast('✉️ Email con SEPA enviado a '+eml,'ok');
